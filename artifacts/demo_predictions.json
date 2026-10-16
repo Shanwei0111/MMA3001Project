@@ -1,0 +1,32 @@
+{
+  "selected_model": "forest",
+  "examples": [
+    {
+      "engine_id": 1,
+      "cycle": 31,
+      "raw_rul_prediction": 167.4802124870412,
+      "predicted_rul_cycles": 167.4802124870412,
+      "input_status": "ok",
+      "flags": [],
+      "model_version": "d550355c5018"
+    },
+    {
+      "engine_id": 2,
+      "cycle": 49,
+      "raw_rul_prediction": 137.30819894383774,
+      "predicted_rul_cycles": 137.30819894383774,
+      "input_status": "ok",
+      "flags": [],
+      "model_version": "d550355c5018"
+    },
+    {
+      "engine_id": 3,
+      "cycle": 126,
+      "raw_rul_prediction": 46.54436605884154,
+      "predicted_rul_cycles": 46.54436605884154,
+      "input_status": "ok",
+      "flags": [],
+      "model_version": "d550355c5018"
+    }
+  ]
+}

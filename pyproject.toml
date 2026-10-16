@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jet-rul"
+version = "1.0.0"
+description = "Reproducible C-MAPSS FD001 remaining-useful-life study for MMA3001"
+requires-python = ">=3.11"
+authors = [{name = "Chua Shanwei"}]
+dependencies = ["numpy", "pandas", "scipy", "scikit-learn", "matplotlib", "joblib", "psutil"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pdoc"]
+report = ["reportlab", "pypdf", "pillow"]
+
+[project.scripts]
+jet-rul = "jet_rul.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"

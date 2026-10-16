@@ -12,4 +12,6 @@ data/raw/*
 artifacts/models/
 artifacts/profiles/*.prof
 .private/
+.chart-data-*/
+.codex-finalizer/
 *.zip

@@ -1,0 +1,45 @@
+# Five-minute presentation
+
+Timings total 300 seconds. Rehearse and revise in your own words.
+
+## Slide 1 (20 seconds)
+
+This project estimates the remaining operational cycles of simulated turbofan engines. I compare a random forest with sensor-based ridge regression and an age-only baseline. The objective is a reproducible engineering comparison, including errors and computational cost. The estimates support a maintenance review in the simulated FD001 setting.
+
+Sources: NASA catalog: https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data
+
+## Slide 2 (40 seconds)
+
+FD001 contains one operating condition and HPC degradation. Each engine has a different initial condition and degradation history. Training histories reach failure, so remaining life is the failure cycle minus the current cycle. Test histories stop early, and their separate RUL file gives the correct endpoint truth. The six channels describe compressor and turbine temperatures, pressures and core speed. I retain the native units and absolute cycle number. A prediction needs at least thirty contiguous observations. Missing data and invalid histories raise errors. The result is remaining cycles, not flight hours or a certified replacement decision.
+
+Sources: NASA C-MAPSS supplied README and data manifest; Saxena et al. 2008, https://ntrs.nasa.gov/citations/20090029214
+
+## Slide 3 (55 seconds)
+
+For each of six sensors, I use the latest value, trailing mean and least-squares slope, plus age. The slope uses centered local cycle positions, which improves numerical conditioning. Each feature uses only past and present observations. Training samples every fifth cycle and the final cycle, with equal total fitting weight per engine. Five-fold engine cross-validation chooses the window and model settings. The winning forest averages two hundred trees with depth eight and minimum leaf ten. Ridge is an important alternative because these features are correlated and the fleet is small. It standardizes using fitting rows only and solves regularized least squares with SVD. The age-only baseline tests whether the sensors add useful information. The target remains uncapped RUL.
+
+Sources: artifacts/selection.json; docs/METHOD.md; sklearn Ridge and RandomForestRegressor documentation
+
+## Slide 4 (45 seconds)
+
+The eighty development engines support tuning. Twenty separate internal holdout engines apply the predeclared selection rule. The forest reduced holdout RMSE by ten point six percent and had a lower NASA score, so selection froze before official testing. All models then refit on the hundred training engines. Thirty-seven pytest checks cover analytic signals, labels, invalid inputs, engine separation, future-data leakage and persistence. An integration test prevents official target parsing during selection. The GitHub repository separates source, tests, data provenance, documentation and saved results. Its README supplies reproduction commands, and pdoc HTML explains the functions. Bootstrap uncertainty resamples entire test engines.
+
+Sources: artifacts/splits.json, selection.json and test-results.xml; https://github.com/Shanwei0111/MMA3001Project
+
+## Slide 5 (65 seconds)
+
+On the official test set, forest MAE is fourteen point six nine cycles and RMSE is twenty point zero four. Ridge RMSE is twenty-two point two nine, and age-only is thirty-four point eight nine. The selected forest meets the proposed MAE twenty and RMSE twenty-five targets. Its bootstrap RMSE interval is sixteen point three three to twenty-three point five six cycles. However, the paired forest-minus-ridge RMSE interval includes zero, so this fleet does not establish a robust RMSE advantage. There is also a crucial tradeoff: the forest NASA score is worse than ridge, despite lower average error. This score penalizes overestimating life more heavily. The holdout score advantage did not generalize. I retain the frozen choice and disclose the optimistic tail errors instead of choosing again on test outcomes. Metric intervals are not individual-engine confidence bounds.
+
+Sources: artifacts/test_metrics.csv and bootstrap_intervals.json; scoring convention: https://ntrs.nasa.gov/api/citations/20090029214/downloads/20090029214.pdf
+
+## Slide 6 (40 seconds)
+
+Vectorization reduces full-training-set feature time from zero point two nine one to zero point one eight three seconds, a one point five nine times speedup. The maximum difference from the reference formula is about one point nine times ten to the minus thirteen. The forest takes about twenty milliseconds from a thirty-observation history to its output on this machine. Ridge has far less arithmetic and storage cost. Its nineteen-feature dot product and scaling each need about thirty-eight FLOPs. Forest traversal instead uses roughly fifteen hundred threshold comparisons, plus two hundred aggregation FLOPs. Those comparisons and irregular memory accesses explain why a FLOP count alone is misleading.
+
+Sources: artifacts/performance.json and profiles/features.txt; timings include warm call overhead and exclude loading
+
+## Slide 7 (35 seconds)
+
+The model supports only the simulated FD001 regime. It does not enforce thermodynamic conservation or provide calibrated uncertainty for an individual engine. Some large optimistic errors remain, and systematic sensor bias can change forecasts. Codex provided substantial assistance in design, code, testing and these materials. Validation identified and corrected an invalid-value test-fixture problem and resolved a conflicting score formula against the NASA source. I must personally review and reproduce the work, add my genuine learning reflection and explain it without AI during the defense.
+
+Sources: docs/AI_USE.md; supplied MMA3001 project brief, AI use and individual-defense requirements

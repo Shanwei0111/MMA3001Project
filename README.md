@@ -75,6 +75,18 @@ default, so copy chosen rerun evidence there only deliberately.
 
 Individual stages are available:
 
+The committed code was checked from a clean clone: all 37 tests passed and
+refitting the three frozen configurations reproduced all 100 endpoint predictions
+with maximum absolute difference 0.0 in the same environment. This verification
+repeated final fitting/evaluation, not the whole tuning search. See
+artifacts/reproduction_check.json. Repeat this check with:
+
+```powershell
+python scripts/verify_reproduction.py --data-dir data/raw
+```
+
+For individual workflow stages:
+
 ```powershell
 python -m jet_rul develop --data-dir data/raw
 python -m jet_rul evaluate --data-dir data/raw

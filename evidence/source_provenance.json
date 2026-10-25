@@ -1,0 +1,22 @@
+{
+  "source": "Current student Assignment workflow; earlier reference implementation is retained on archive/reference-implementation",
+  "date": "2026-10-25",
+  "original_source_sha256": {
+    "rul_utils.py": "043628cef8f6363939107de9d7e5a0580a753f7ead04a758a5b651f5182c45a3",
+    "step1_preparedata.py": "26a1dacf7e84937e85232bb82ebf31e59c4a48ef2d847c54555c2954a2bb771c",
+    "step2_splitdata.py": "1e0e09b84cd358455c18f0f41724921df8334771718cf020563c9504608ec0e9",
+    "step3_linear_models.py": "64cd71d2649e4fef3f3830f1c936a28471e74d1246ae1dca5a17fe5d002a47ba",
+    "step4_randomforest.py": "23eed0f29882cb0b4307532117977bebdaaf18f4e26aabb084b0b421573ebbb6",
+    "step5_histgradientboosting.py": "3555afc65650bf11003ad934bf9b410622f49e5743f33546e7184bcc75a967b3",
+    "step6_testevaluation.py": "78c0a50e33143c849ca10d09b0a8a32622a7d751f14c7d5b7fec79a84a0e465c",
+    "step7_performance.py": "808a7614e4002160710dea760ffd223af07208b19fac1b497af2697e860cd8ec",
+    "step8_plotbaseline.py": "8a41673c2ff426a30e3fc3d9ea9867e0db498aa5eb478d7c103c2dfb6bb9cb41"
+  },
+  "changes": [
+    "Packaged current learning scripts under src/rul_project/steps without changing settings",
+    "Removed hardcoded local paths and import-time execution",
+    "Corrected test helper shadowing; tests now import production split_by_engine",
+    "Raw FD001 files remain outside public Git history; data/manifest.json records exact bytes",
+    "Timing evidence is frozen separately; reruns use outputs/"
+  ]
+}

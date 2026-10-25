@@ -1,5 +1,10 @@
 * text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.csv text eol=lf
+*.html text eol=lf
 *.pdf binary
-*.pptx binary
 *.png binary
-*.joblib binary
+*.prof binary

@@ -1,24 +1,27 @@
-# Dataset provenance and access
+# NASA C-MAPSS FD001 data
 
-NASA C-MAPSS FD001 files are required: train_FD001.txt, test_FD001.txt and
-RUL_FD001.txt. Put them in data/raw/ without renaming or editing them.
+Source: National Aeronautics and Space Administration, Prognostics Center of
+Excellence. [Official catalog](https://catalog.data.gov/dataset/cmapss-jet-engine-simulated-data).
+[NASA archive](https://data.nasa.gov/docs/legacy/CMAPSSData.zip).
 
-Official catalog: https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data
+The original files are `train_FD001.txt`, `test_FD001.txt`, `RUL_FD001.txt`.
+SHA-256 fingerprints and byte counts are in [manifest.json](manifest.json).
+Training has 20,631 records from 100 complete engine histories; testing has
+13,096 records from 100 truncated histories and 100 endpoint RUL labels.
+Source records have 26 columns: ID, cycle, three settings and 21 sensors.
 
-Archive linked by the catalog: https://data.nasa.gov/docs/legacy/CMAPSSData.zip
+Copy exact source files into `data/raw/` or use the acquisition commands in
+the README. The project checks bytes before modelling and does not edit the
+original files. Raw data is excluded from the public source repository. The
+local Moodle clone ZIP includes only the student's supplied FD001 subset,
+accompanied by this attribution and the same hash manifest.
 
-The supplied copy is verified by SHA-256 in manifest.json. The raw files are
-excluded from public Git history. The catalog marks public access but does not
-state a specific license, so this repository does not assign an MIT license to
-NASA data. Read NASA's current terms before redistribution. The MIT license
-covers this project's original code and documentation only. A local submission
-archive may include the user's supplied FD001 files for examiner reproduction.
+Public accessibility is stated in NASA's catalog, but a specific dataset
+license was not given in the inspected record. The project's MIT license
+does not apply to NASA data. Source-derived numerical evidence is retained
+for review with NASA attribution, without assigning a new data license.
 
-FD001 has 100 training engines / 20,631 rows, and 100 truncated test engines /
-13,096 rows, with 100 separate endpoint RUL values. All observations have 26
-columns: two identifiers, three settings and 21 sensors. The source README's
-final sensor-number description is inconsistent with its actual 26-column files.
-
-The preliminary audit checked all four subsets, but only FD001 is modeled.
-Source summaries are not model-selection evidence. Source data are not cleaned
-by silently dropping rows; the supplied FD001 passes finite/sequence checks.
+Cite: Saxena, A., Goebel, K., Simon, D., & Eklund, N. (2008). Damage propagation
+modeling for aircraft engine run-to-failure simulation. In *2008 International
+Conference on Prognostics and Health Management* (pp. 1-9). IEEE.
+https://doi.org/10.1109/PHM.2008.4711414

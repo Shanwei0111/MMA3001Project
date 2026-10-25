@@ -1,179 +1,173 @@
-# Turbofan remaining useful life - NASA C-MAPSS FD001
+# Turbofan Remaining Useful Life - NASA C-MAPSS FD001
 
-**Chua Shanwei, 35393343 - MMA3001 Numerical Methods and Machine Learning**
+**Chua Shanwei · 35393343 · MMA3001 Numerical Methods and Machine Learning**
 
-Estimate remaining operational cycles from age and six causal sensor histories.
-This project compares a random forest, standardized ridge regression and an
-age-only baseline using engine-level validation, uncertainty analysis and
-measured computational cost. The scope is simulated FD001 only.
+Estimate cycles to simulated engine failure from operating age and six
+gas-path sensors. The current submission compares **age-only linear regression,
+multi-sensor linear regression, random forest (RF), and histogram gradient
+boosting (HGB)** using the student's current `Assignment` experiments.
 
-## Measured result
+## Results and report
 
-The frozen internal holdout rule selected a 200-tree random forest, depth 8,
-minimum leaf 10, feature fraction 0.7 and a 30-cycle window. Training uses every
-fifth eligible cycle and equal-engine weights. Official test results (100 engines):
-
-| Model | MAE (cycles) | RMSE (cycles) | NASA score |
+| Model | Test MAE (cycles) | Test RMSE (cycles) | NASA-style score |
 |---|---:|---:|---:|
-| Age-only | 28.83 | 34.89 | 8770.3 |
-| Sensor ridge | 18.26 | 22.29 | 1670.4 |
-| Random forest (selected) | 14.69 | 20.04 | 2174.6 |
+| Age-only linear | 33.46 | 39.31 | 17239.68 |
+| Multi-sensor linear | 26.40 | 31.83 | 9272.61 |
+| Random forest | 19.38 | 25.82 | 5804.70 |
+| Histogram gradient boosting | 18.93 | 26.18 | 7212.36 |
 
-The forest improves average error but has a **worse official NASA score than
-ridge**, revealing optimistic tail errors. Selection remains frozen. Its RMSE
-bootstrap interval is [16.33, 23.56] cycles; the paired forest-minus-ridge interval
-[-4.87, 0.29] includes zero. These are metric uncertainty intervals, not individual
-prediction bounds. No real-engine maintenance suitability is claimed.
+These values use one final observed endpoint per official test engine (100
+engines). RF was retained for RMSE and asymmetric-score performance. HGB is
+faster and smaller; paired HGB-minus-RF error intervals include zero. The
+report explains test reuse, positive bias and the uncertainty limitations.
 
-## Deliverables and evidence
+- [Written project documentation (PDF)](reports/MMA3001_Chua_Shanwei_35393343_Written_Project_Documentation.pdf)
+- [Editable report text](reports/MMA3001_Chua_Shanwei_35393343_Written_Project_Documentation.md)
+- [HTML API documentation](docs/html/index.html): open after cloning, or serve locally below.
+- [Original report evidence](evidence/reported/) and [source provenance](evidence/source_provenance.json).
+- [Testing guide and reports](docs/TESTING.md), [method and I/O](docs/METHOD.md),
+  [development history](docs/DEVELOPMENT.md), [AI assistance record](docs/AI_USE.md).
 
-- [Technical report](output/pdf/Jet_Engine_RUL_Report.pdf): nine main pages plus references, all seven required sections.
-- [Editable presentation](presentation/Jet_Engine_RUL_Presentation.pptx): seven slides and 300 seconds of suggested narration.
-- [Speaker notes](presentation/SPEAKER_NOTES.md) and [technical defense guide](presentation/DEFENSE.md).
-- [Generated HTML source documentation](docs/html/jet_rul.html): download/clone and open locally, or serve as described below.
-- [Method and I/O specification](docs/METHOD.md), [AI disclosure](docs/AI_USE.md), and [brief coverage matrix](docs/REQUIREMENTS.md).
-- [Test report](artifacts/test-results.xml), saved [model selection](artifacts/selection.json), [predictions](artifacts/test_predictions.csv) and [performance evidence](artifacts/performance.json).
+## Environment and installation
 
-## Quick start (Python 3.12)
-
-The tested environment uses Python 3.12 on Windows; exact installed Python
-packages are pinned in requirements-lock.txt. A Linux CI job runs the synthetic
-tests without NASA data. Internet access is needed to install dependencies.
+The recorded experiment uses **CPython 3.14.5**, NumPy 2.5.4, pandas 3.1.0,
+SciPy 1.18.1, scikit-learn 1.9.1, Matplotlib 3.11.2 and threadpoolctl 3.7.0.
+Python 3.14 is required by this pinned environment. README commands run from
+the repository root. Use an empty output directory for an independent rerun.
 
 ```powershell
 git clone https://github.com/Shanwei0111/MMA3001Project.git
 cd MMA3001Project
+python --version
 python -m venv .venv
-.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-lock.txt
-python -m pip install --no-build-isolation --no-deps -e .
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+.venv\Scripts\python.exe -m pip install --no-deps -e .
 ```
 
-On Linux/macOS, activate with `source .venv/bin/activate` instead. If PowerShell
-activation is restricted, use `.venv\Scripts\python.exe` in place of `python`.
+In the commands below, `python` means this virtual environment's interpreter;
+activate it with `.venv\Scripts\Activate.ps1`, or use its full path. On
+Linux/macOS use `.venv/bin/python` and `source .venv/bin/activate`.
 
-Obtain the NASA archive linked by the [official catalog](https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data).
-Extract `train_FD001.txt`, `test_FD001.txt`, `RUL_FD001.txt` into `data/raw/`.
-Do not edit the source files. The workflow checks them against data/manifest.json.
-See [data provenance and terms](data/README.md). A local submission archive also
-contains the user's supplied FD001 files, so this extraction step can be skipped.
+## Obtain the exact data
+
+Raw NASA files are excluded from public Git history and are not licensed as
+project code. Follow [data attribution and access](data/README.md). Three
+files are required: `train_FD001.txt`, `test_FD001.txt`, `RUL_FD001.txt`.
+Acquire them using **one** of these options:
 
 ```powershell
-python -m pytest --junitxml=artifacts/test-results.xml
-python -m jet_rul reproduce --data-dir data/raw
-python -m jet_rul predict --data-dir data/raw --engine 1
-python -m pdoc --docformat numpy -o docs/html jet_rul
-python scripts/build_report.py
+# Copy the student's existing NASA files, validating their SHA-256 hashes.
+python -m rul_project data --data-source "../CMAPSSData"
+
+# Or explicitly download the NASA archive linked by its official catalog.
+python -m rul_project data --download-data
 ```
 
-The complete experiment searches 40 configurations across five folds, then
-performs diagnostic studies, refits, evaluates, profiles and draws figures.
-Allow several minutes on a modern CPU; timing depends on machine load. It writes
-to artifacts/ and replaces the corresponding saved results. For an independent
-rerun, supply `--output-dir artifacts/rerun`; report building uses artifacts/ by
-default, so copy chosen rerun evidence there only deliberately.
+Alternatively, put unmodified files in `data/raw/` and run `python -m
+rul_project data`. [data/manifest.json](data/manifest.json) records source
+fingerprints and byte counts. Mismatched files are rejected without overwrite.
 
-Individual stages are available:
-
-The committed code was checked from a clean clone: all 37 tests passed and
-refitting the three frozen configurations reproduced all 100 endpoint predictions
-with maximum absolute difference 0.0 in the same environment. This verification
-repeated final fitting/evaluation, not the whole tuning search. See
-artifacts/reproduction_check.json. Repeat this check with:
+## Reproduce the workflow
 
 ```powershell
-python scripts/verify_reproduction.py --data-dir data/raw
+python -m pytest --junitxml=outputs/pytest_results.xml
+python -m rul_project all
+python scripts/verify_reproduction.py --output-dir outputs
+python scripts/build_docs.py
+python scripts/build_docs.py --check
 ```
 
-For individual workflow stages:
+The full run includes development fitting, the RF depth study, five grouped
+folds for each ensemble, official testing, timing/profiling, plots and paired
+bootstrap. Allow several minutes on a laptop. Models are fitted on one
+computation thread, with random seed 42. Predictions/metrics should reproduce
+within the verification tolerance; timings and platform-dependent storage
+inspection may change. No feature scaling, smoothing, windows, RUL cap or
+engine weighting is introduced during packaging.
+
+`outputs/` contains rerun results and is ignored by Git. `evidence/reported/`
+is the frozen evidence behind the written report. Never replace old benchmark
+times with a new run without recording the changed hardware and procedure.
+The CLI rejects using the frozen evidence directory as its output destination.
+
+Individual learning stages can also be run in this dependency order:
 
 ```powershell
-python -m jet_rul develop --data-dir data/raw
-python -m jet_rul evaluate --data-dir data/raw
-python -m jet_rul profile --data-dir data/raw
-python -m jet_rul figures --data-dir data/raw
+python -m rul_project preparedata
+python -m rul_project splitdata
+python -m rul_project linear_models
+python -m rul_project randomforest
+python -m rul_project histgradientboosting
+python -m rul_project testevaluation
+python -m rul_project plotbaseline
+python -m rul_project performance
+python -m rul_project uncertainty
 ```
 
-`develop` only parses training observations. It saves partitions and model choice
-before `evaluate` reads official labels. Keep configs/fd001.json unchanged between
-stages. Test evaluation is reproducible, but must not be used to tune subsequent
-models while claiming it remains an untouched test. Model files are generated
-locally under artifacts/models/ and excluded from Git. Load only trusted joblib
-files; they use Python pickle.
+The eight original learning scripts map to the first eight stage modules in
+`src/rul_project/steps/`; `uncertainty` reproduces the later HGB report analysis.
+All stages have main guards. Importing them for pdoc or tests performs no I/O,
+training or plotting. `python -m rul_project --help` lists path overrides:
 
-## Input and prediction example
-
-Source rows have 26 fields: ID, cycle, three settings, 21 sensors. The predictor
-uses age plus s2/s3/s4/s7/s9/s11 current values, trailing means and slopes. Units
-are degrees Rankine, psia and rpm. Missing data, gaps, duplicates, impossible
-primary sensor values and fewer than 30 observations raise errors. Values beyond
-empirical sensor ranges return warnings. See the full [I/O contract](docs/METHOD.md).
-
-```python
-from jet_rul.data import read_cmapss
-from jet_rul.models import load_model
-
-observations = read_cmapss('data/raw/test_FD001.txt')
-model = load_model('artifacts/models/forest.joblib')
-result = model.predict(observations.loc[observations.engine_id == 1])
-print(result['predicted_rul_cycles'], result['flags'])
+```powershell
+python -m rul_project all --data-dir data/raw --output-dir outputs/independent
 ```
-
-The official target is uncapped RUL. Scoring uses error = prediction - truth,
-with exponential denominators 13 for early and 10 for late predictions. Never
-infer test truth from the last observed cycle or compare capped-target scores
-without stating the changed convention.
 
 ## Repository layout
 
 ```text
-src/jet_rul/       parser, causal features, models, metrics, experiments, profiling
-tests/            analytic, boundary, leakage and synthetic workflow tests
-configs/          fixed search and selection settings
-data/             provenance, SHA-256 manifest, local untracked raw files
-artifacts/        numerical evidence, figures, profiler and JUnit test report
-docs/             engineering method, disclosure, requirement mapping, pdoc HTML
-notebooks/        optional training-only exploration
-scripts/          report/presentation builders and reproducibility verification
-output/pdf/       assessed report and editable Markdown companion
-presentation/     editable slides, narration, defense guide and source content
-.github/          automatic test/documentation checks
+src/rul_project/          Shared API, CLI, validated data access and learning stages
+tests/                   Production-function tests and workflow contract checks
+data/                    Dataset attribution and source SHA-256 manifest
+docs/html/               Generated pdoc API pages (committed and checked in CI)
+docs/                    Method, testing, development and AI-use notes
+evidence/reported/       Original metrics, predictions, plots and test evidence
+evidence/verification/   Fresh-clone verification and current test reports
+reports/                 Written report PDF and editable text
+scripts/                 Documentation, reproduction and zipped-clone utilities
+.github/workflows/       Tests and documentation synchronization checks
+outputs/                 Ignored regenerated results
 ```
 
-## Documentation and artifacts
+## Read the API documentation
 
-Open docs/html/jet_rul.html in a browser after cloning. GitHub's file viewer does
-not execute raw HTML. Alternatively run `python -m http.server 8000 --directory
-docs/html` and visit http://localhost:8000/jet_rul.html. Regenerate HTML after
-source changes to keep docstrings synchronized.
+GitHub displays HTML source files as source code. To read the rendered pages:
 
-The report and scientific figures regenerate with ordinary pinned Python
-packages. The editable PowerPoint is included directly. Its optional JavaScript
-builder uses the Codex bundled `@oai/artifact-tool` runtime and requires that
-runtime plus ARTIFACT_SKILL_DIR, RUNTIME_PYTHON and RUNTIME_NODE_MODULES; it is not a public npm
-dependency. The deck's content and narration also exist as plain JSON/Markdown,
-so a reader can edit the slides without that authoring runtime. All model results
-and validation evidence reproduce independently of presentation tooling.
+```powershell
+python -m http.server 8000 --directory docs/html
+```
 
-## Development and Git history
+Open `http://localhost:8000/`. Rebuild after changing any Python API:
+`python scripts/build_docs.py`. The source manifest includes all package and
+support scripts; `--check` verifies fingerprints and committed HTML. Docstrings
+use Google style with inputs, returns, exceptions and usage. See
+[docs/DOCUMENTATION.md](docs/DOCUMENTATION.md).
 
-The repository preserves the original README commit and adds actual implementation,
-experiment and documentation stages. Commits are not backdated. For personal
-changes, use a branch such as `git switch -c improve-input-checks`, run pytest,
-regenerate docs, and commit a single meaningful change with a descriptive prefix
-(`feat:`, `fix:`, `test:`, `docs:`, `experiment:`). Do not commit environments,
-downloaded data, temporary files or credentials. Keep main functional. The
-GitHub Actions workflow builds tests/docs and uploads their evidence.
+## Version history and submission
 
-## Student completion and disclosure
+The earlier reference implementation used different features and models. It is
+preserved on `archive/reference-implementation`, while `main` contains this
+current four-model workflow. [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) explains
+the transition and the actual packaging commits; no past development dates or
+student actions have been invented.
 
-Substantial code and writing were generated with Codex assistance. The student
-must review and understand them, run the work personally, add a genuine reflection
-to [AI_USE.md](docs/AI_USE.md) and the report, and rehearse the oral defense without
-AI. Confirm teaching-team approval and the actual deadline in the unit overview.
-The full brief says Week 5 for topic selection, while the key-points document says
-Week 6; neither supplies an exact final submission date. Upload the final report,
-accessible GitHub link and zipped clone via Moodle according to the unit instructions.
+Final accessible repository: https://github.com/Shanwei0111/MMA3001Project
 
-Original code/documentation use the [MIT license](LICENSE). NASA data and third-party
-materials retain their own terms.
+To produce the required zipped clone after committing and pushing:
+
+```powershell
+python scripts/package_submission.py --destination ../MMA3001_Chua_Shanwei_35393343_Repository_Clone.zip --data-source data/raw
+```
+
+This clones remote `main` into a fresh directory, verifies and adds the locally
+supplied raw FD001 files, and zips the clone including its Git metadata. No
+virtual environment, caches or generated rerun output are included. Submit
+that ZIP through Moodle and submit the written PDF separately as required.
+
+## Licensing and acknowledgements
+
+[MIT](LICENSE) covers original project code and documentation. NASA data and
+third-party packages have their own terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+and [data/README.md](data/README.md). Data access is public; the inspected NASA
+catalog does not specify a dataset license. AI-assisted implementation and
+drafting are disclosed in the report and [docs/AI_USE.md](docs/AI_USE.md).

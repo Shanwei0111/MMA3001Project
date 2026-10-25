@@ -1,0 +1,5 @@
+model,serialized_bytes,serialized_kib
+Age-only,608,0.59375
+Multi-sensor linear,772,0.75390625
+Random forest,3202693,3127.6298828125
+Histogram gradient boosting,337352,329.4453125

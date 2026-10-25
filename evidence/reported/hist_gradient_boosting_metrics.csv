@@ -1,0 +1,2 @@
+model,n_features,train_mae,train_rmse,raw_mae,raw_rmse,clipped_mae,clipped_rmse,negative_raw_predictions,fit_seconds
+Histogram gradient boosting,7,23.817194234127342,34.132775100449045,28.212687711994526,39.684758683324596,28.212687711994526,39.684758683324596,0,0.45292710000649095

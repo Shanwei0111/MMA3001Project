@@ -7,5 +7,7 @@ No directory is created merely by importing this module.
 import os
 from pathlib import Path
 
+__all__ = []
+
 DATA_DIR = Path(os.environ.get("RUL_DATA_DIR", "data/raw")).resolve()
 OUTPUT_DIR = Path(os.environ.get("RUL_OUTPUT_DIR", "outputs")).resolve()

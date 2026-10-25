@@ -1,0 +1,5 @@
+model,numerical_array_bytes,numerical_array_kib
+Age-only,16,0.015625
+Multi-sensor linear,64,0.0625
+Random forest,3178368,3103.875
+Histogram gradient boosting,313432,306.0859375

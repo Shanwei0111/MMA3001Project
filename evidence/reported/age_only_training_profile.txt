@@ -1,0 +1,23 @@
+         3162 function calls (3113 primitive calls) in 0.006 seconds
+
+   Ordered by: cumulative time
+   List reduced from 418 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.006    0.006 base.py:1381(wrapper)
+        1    0.000    0.000    0.005    0.005 _base.py:653(fit)
+        1    0.000    0.000    0.004    0.004 validation.py:2932(validate_data)
+        4    0.000    0.000    0.003    0.001 validation.py:733(check_array)
+        1    0.000    0.000    0.003    0.003 validation.py:1186(check_X_y)
+        1    0.000    0.000    0.001    0.001 _base.py:113(_preprocess_data)
+        5    0.000    0.000    0.001    0.000 generic.py:6549(dtypes)
+        6    0.000    0.000    0.001    0.000 series.py:360(__init__)
+        1    0.000    0.000    0.001    0.001 validation.py:1354(_check_y)
+        1    0.000    0.000    0.001    0.001 _basic.py:1246(lstsq)
+      121    0.000    0.000    0.001    0.000 {built-in method builtins.hasattr}
+        3    0.000    0.000    0.001    0.000 __init__.py:444(from_native)
+        3    0.000    0.000    0.001    0.000 translate.py:270(_from_native_impl)
+        2    0.000    0.000    0.001    0.000 accessor.py:227(__get__)
+        2    0.000    0.000    0.001    0.000 accessor.py:38(__init__)
+
+

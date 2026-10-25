@@ -1,0 +1,23 @@
+         208256 function calls (205810 primitive calls) in 8.818 seconds
+
+   Ordered by: cumulative time
+   List reduced from 499 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    8.819    8.819 base.py:1381(wrapper)
+        1    0.000    0.000    8.817    8.817 _forest.py:302(fit)
+        1    0.000    0.000    8.643    8.643 parallel.py:54(__call__)
+        1    0.000    0.000    8.643    8.643 parallel.py:1995(__call__)
+      102    0.002    0.000    8.643    0.085 parallel.py:1914(_get_sequential_output)
+      100    0.009    0.000    8.634    0.086 parallel.py:140(__call__)
+      100    0.014    0.000    8.598    0.086 _forest.py:132(_parallel_build_trees)
+      100    8.342    0.083    8.479    0.085 _classes.py:226(_fit)
+      100    0.002    0.000    0.165    0.002 _base.py:141(_make_estimator)
+      501    0.008    0.000    0.140    0.000 base.py:248(get_params)
+      501    0.015    0.000    0.128    0.000 base.py:218(_get_param_names)
+      501    0.001    0.000    0.106    0.000 inspect.py:3320(signature)
+      501    0.001    0.000    0.106    0.000 inspect.py:3033(from_callable)
+      100    0.059    0.001    0.105    0.001 _forest.py:95(_generate_sample_indices)
+      501    0.008    0.000    0.104    0.000 inspect.py:2413(_signature_from_callable)
+
+

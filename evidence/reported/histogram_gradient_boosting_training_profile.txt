@@ -1,0 +1,23 @@
+         105983 function calls (100549 primitive calls) in 0.656 seconds
+
+   Ordered by: cumulative time
+   List reduced from 611 to 15 due to restriction <15>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.656    0.656 base.py:1381(wrapper)
+        1    0.030    0.030    0.654    0.654 gradient_boosting.py:393(fit)
+      200    0.003    0.000    0.360    0.002 grower.py:383(grow)
+     2587    0.250    0.000    0.357    0.000 grower.py:486(split_next)
+      200    0.029    0.000    0.155    0.001 grower.py:244(__init__)
+      200    0.058    0.000    0.112    0.001 grower.py:402(_initialize_root)
+     2672    0.061    0.000    0.065    0.000 grower.py:461(_compute_best_split_and_push)
+      200    0.002    0.000    0.063    0.000 grower.py:709(make_predictor)
+ 5374/200    0.059    0.000    0.059    0.000 grower.py:745(_fill_predictor_arrays)
+  821/819    0.005    0.000    0.041    0.000 {built-in method numpy.asarray}
+      200    0.001    0.000    0.035    0.000 _internal.py:627(_dtype_from_pep3118)
+  400/200    0.016    0.000    0.034    0.000 _internal.py:632(__dtype_from_pep3118)
+        1    0.000    0.000    0.026    0.026 gradient_boosting.py:1106(_bin_data)
+      2/1    0.000    0.000    0.026    0.026 _set_output.py:325(wrapped)
+        1    0.000    0.000    0.026    0.026 base.py:913(fit_transform)
+
+

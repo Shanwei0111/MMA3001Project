@@ -1,0 +1,3 @@
+model,n_trees,total_nodes,maximum_actual_depth,comparison_upper_bound,output_combination_flops
+Random forest,100,44144,8,800,100
+Histogram gradient boosting,200,5374,4,800,200

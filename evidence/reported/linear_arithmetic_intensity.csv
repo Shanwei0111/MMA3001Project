@@ -1,0 +1,3 @@
+model,n_features,estimated_flops,assumed_transfer_bytes,estimated_flops_per_byte
+Age-only,1,2,32,0.0625
+Multi-sensor linear,7,14,128,0.109375

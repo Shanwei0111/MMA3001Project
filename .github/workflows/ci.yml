@@ -1,0 +1,37 @@
+name: Tests and synchronized API documentation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+          cache: pip
+      - name: Install pinned environment and project
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install --no-deps -e .
+      - name: Test production code and executable examples
+        run: |
+          python -m pytest --junitxml=outputs/pytest_results.xml
+          python -m doctest src/rul_project/rul_utils.py
+      - name: Check and regenerate API documentation
+        run: |
+          python scripts/build_docs.py --check
+          python scripts/build_docs.py
+          git diff --exit-code -- docs/html docs/source_manifest.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pytest-report
+          path: outputs/pytest_results.xml

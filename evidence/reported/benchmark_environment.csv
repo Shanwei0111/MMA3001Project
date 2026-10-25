@@ -1,0 +1,2 @@
+python_version,sklearn_version,platform,processor,training_engines,training_records,prediction_batch_size,fit_repetitions,prediction_repetitions,requested_computation_threads
+3.14.5,1.9.1,Windows-11-10.0.26300-SP0,"Intel64 Family 6 Model 126 Stepping 5, GenuineIntel",100,20631,100,3,30,1

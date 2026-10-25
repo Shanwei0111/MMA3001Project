@@ -1,0 +1,2 @@
+model,n_features,raw_mae,raw_rmse,clipped_mae,clipped_rmse,negative_raw_predictions
+Random forest,7,27.862561286123704,39.59486318621929,27.862561286123704,39.59486318621929,0

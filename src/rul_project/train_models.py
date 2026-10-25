@@ -39,7 +39,7 @@ def load_development_split(output_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame
         FileNotFoundError: If the preparation/split stages have not been run.
         ValueError: If either subset is empty or an engine appears in both.
 
-    Example: train, validation = load_development_split(Path("outputs")).
+    Example: train, validation = load_development_split(Path("results/generated")).
     """
     train = pd.read_csv(output_dir / "train_split.csv")
     validation = pd.read_csv(output_dir / "validation_split.csv")
@@ -69,7 +69,7 @@ def fit_validation_model(
         ValueError: If a model name, feature array or target is invalid or groups overlap.
         OSError: If predictions cannot be written.
 
-    Example: fit_validation_model(train, validation, "Random forest", Path("outputs")).
+    Example: fit_validation_model(train, validation, "Random forest", Path("results/generated")).
     """
     if set(train.engine_id).intersection(validation.engine_id):
         raise ValueError("Training and validation engines overlap.")
@@ -207,7 +207,7 @@ def train_development_models(output_dir: Path, family: str) -> None:
         ValueError: If family, grouping or estimator inputs are invalid.
         OSError: If output cannot be written.
 
-    Example: train_development_models(Path("outputs"), "forest").
+    Example: train_development_models(Path("results/generated"), "forest").
     """
     if family not in {"linear", "forest", "hgb"}:
         raise ValueError(f"Unknown model family: {family}")

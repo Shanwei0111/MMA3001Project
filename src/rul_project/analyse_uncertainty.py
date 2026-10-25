@@ -33,7 +33,7 @@ def paired_bootstrap(
         ValueError: If groups are empty/duplicated/misaligned, values are invalid
             or repetitions is not a positive integer.
 
-    Example: paired_bootstrap(pd.read_csv("outputs/official_test_predictions.csv")).
+    Example: paired_bootstrap(pd.read_csv("results/generated/official_test_predictions.csv")).
     """
     if (
         isinstance(repetitions, bool)
@@ -108,7 +108,7 @@ def save_uncertainty_analysis(output_dir: Path) -> pd.DataFrame:
         ValueError: If engine predictions are invalid or misaligned.
         OSError: If output tables cannot be written.
 
-    Example: save_uncertainty_analysis(Path("outputs")). No model is refitted.
+    Example: save_uncertainty_analysis(Path("results/generated")). No model is refitted.
     """
     summary = paired_bootstrap(
         pd.read_csv(output_dir / "official_test_predictions.csv")

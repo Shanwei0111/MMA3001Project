@@ -9,7 +9,16 @@ from rul_project.rul_metrics import evaluate_rul
 
 
 def test_rul_matches_hand_calculation():
-    """Calculate labels correctly even when rows are unsorted."""
+    """Calculate labels correctly even when rows are unsorted.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [2, 1, 2, 1],
@@ -33,7 +42,16 @@ def test_rul_matches_hand_calculation():
 
 
 def test_input_data_is_not_modified():
-    """Return a new table without changing the caller's data."""
+    """Return a new table without changing the caller's data.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, 1],
@@ -48,6 +66,16 @@ def test_input_data_is_not_modified():
 
 
 def test_empty_data_is_rejected():
+    """Empty data is rejected.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(columns=["engine_id", "cycle"])
 
     with pytest.raises(ValueError, match="must not be empty"):
@@ -56,6 +84,19 @@ def test_empty_data_is_rejected():
 
 @pytest.mark.parametrize("column", ["engine_id", "cycle"])
 def test_missing_column_is_rejected(column):
+    """Missing column is rejected.
+
+    Args:
+        column: Required key column selected by the pytest parametrization.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1],
@@ -68,6 +109,16 @@ def test_missing_column_is_rejected(column):
 
 
 def test_duplicate_engine_cycle_is_rejected():
+    """Duplicate engine cycle is rejected.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, 1],
@@ -82,6 +133,20 @@ def test_duplicate_engine_cycle_is_rejected():
 @pytest.mark.parametrize("column", ["engine_id", "cycle"])
 @pytest.mark.parametrize("invalid_value", [0, -1, 1.5, np.nan, np.inf])
 def test_invalid_key_values_are_rejected(column, invalid_value):
+    """Invalid key values are rejected.
+
+    Args:
+        column: Required key column selected by the pytest parametrization.
+        invalid_value: Invalid ID/cycle value supplied by the parameterized case.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1],
@@ -95,7 +160,16 @@ def test_invalid_key_values_are_rejected(column, invalid_value):
 
 
 def test_engine_split_preserves_complete_histories():
-    """Keep each engine in one subset and retain every record."""
+    """Keep each engine in one subset and retain every record.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, 1, 2, 2, 3, 3, 4, 4],
@@ -122,7 +196,16 @@ def test_engine_split_preserves_complete_histories():
 
 
 def test_engine_split_is_reproducible():
-    """The same input and seed must produce the same split."""
+    """The same input and seed must produce the same split.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, 2, 3, 4],
@@ -139,7 +222,19 @@ def test_engine_split_is_reproducible():
 
 @pytest.mark.parametrize("n_train", [0, -1, 4, 5, 1.5, True])
 def test_invalid_split_size_is_rejected(n_train):
-    """Reject sizes that are invalid or leave an empty subset."""
+    """Reject sizes that are invalid or leave an empty subset.
+
+    Args:
+        n_train: Requested invalid training-engine count supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, 2, 3, 4],
@@ -152,6 +247,16 @@ def test_invalid_split_size_is_rejected(n_train):
 
 
 def test_missing_engine_id_column_is_rejected():
+    """Missing engine id column is rejected.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame({"cycle": [1, 2]})
 
     with pytest.raises(ValueError, match="Missing required column"):
@@ -159,6 +264,16 @@ def test_missing_engine_id_column_is_rejected():
 
 
 def test_missing_engine_id_value_is_rejected():
+    """Missing engine id value is rejected.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     data = pd.DataFrame(
         {
             "engine_id": [1, np.nan, 2],
@@ -171,6 +286,16 @@ def test_missing_engine_id_value_is_rejected():
 
 
 def test_perfect_predictions_have_zero_error():
+    """Perfect predictions have zero error.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     scores = evaluate_rul(
         [0, 10, 100],
         [0, 10, 100],
@@ -182,6 +307,16 @@ def test_perfect_predictions_have_zero_error():
 
 def test_metrics_match_hand_calculation():
     # Signed errors: -3, 0, +4.
+    """Metrics match hand calculation.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     scores = evaluate_rul(
         [10, 20, 30],
         [7, 20, 34],
@@ -195,6 +330,16 @@ def test_metrics_match_hand_calculation():
 
 def test_overprediction_receives_larger_penalty():
     # Equal error magnitudes, opposite directions.
+    """Overprediction receives larger penalty.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     early = evaluate_rul([20], [10])
     late = evaluate_rul([20], [30])
 
@@ -215,11 +360,35 @@ def test_overprediction_receives_larger_penalty():
     ],
 )
 def test_invalid_metric_inputs_are_rejected(actual, predicted):
+    """Invalid metric inputs are rejected.
+
+    Args:
+        actual: Invalid actual-RUL fixture for shape/value rejection.
+        predicted: Corresponding invalid prediction fixture.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     with pytest.raises(ValueError):
         evaluate_rul(actual, predicted)
 
 
 def test_extreme_score_overflow_is_reported():
     # Reject an unrepresentable score instead of silently returning inf.
+    """Extreme score overflow is reported.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     with pytest.raises(FloatingPointError):
         evaluate_rul([0], [10000])

@@ -40,14 +40,32 @@ def fixture_manifest(folder: Path) -> Path:
 
 
 def test_split_tests_target_the_production_function():
-    """Reject a duplicate test helper that masks production split behavior."""
+    """Reject a duplicate test helper that masks production split behavior.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     from test_data_and_metrics import split_by_engine
 
     assert split_by_engine is prepare_dataset.split_by_engine
 
 
 def test_hgb_configuration_matches_report():
-    """Detect changes to the frozen HGB parameters rather than silently retuning."""
+    """Detect changes to the frozen HGB parameters rather than silently retuning.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     parameters = make_hist_gradient_boosting().get_params()
     expected = {
         "loss": "squared_error",
@@ -66,13 +84,37 @@ def test_hgb_configuration_matches_report():
 
 
 def test_missing_raw_source_is_reported(tmp_path):
-    """Missing source files must fail before model fitting."""
+    """Missing source files must fail before model fitting.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     with pytest.raises(FileNotFoundError, match="Missing"):
         verify_data(tmp_path, fixture_manifest(tmp_path))
 
 
 def test_corrupt_source_is_rejected_without_overwrite(tmp_path):
-    """Reject a corrupt existing file without replacing its bytes."""
+    """Reject a corrupt existing file without replacing its bytes.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     manifest = fixture_manifest(tmp_path)
     source = tmp_path / "example.txt"
     source.write_bytes(b"corrupt\n")
@@ -82,7 +124,19 @@ def test_corrupt_source_is_rejected_without_overwrite(tmp_path):
 
 
 def test_local_data_copy_preserves_bytes(tmp_path):
-    """Copy exact verified bytes and preserve the original file."""
+    """Copy exact verified bytes and preserve the original file.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     manifest = fixture_manifest(tmp_path)
     original = tmp_path / "original"
     original.mkdir()
@@ -95,7 +149,19 @@ def test_local_data_copy_preserves_bytes(tmp_path):
 
 
 def test_wrong_local_source_creates_no_raw_payload(tmp_path):
-    """Verify acquired bytes before writing a destination payload."""
+    """Verify acquired bytes before writing a destination payload.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     manifest = fixture_manifest(tmp_path)
     original = tmp_path / "original"
     original.mkdir()
@@ -107,7 +173,19 @@ def test_wrong_local_source_creates_no_raw_payload(tmp_path):
 
 
 def test_importing_all_stages_performs_no_work(tmp_path):
-    """Documentation imports must not read data, train or create output files."""
+    """Documentation imports must not read data, train or create output files.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     code = """
 import importlib, pkgutil, rul_project
 for module in pkgutil.walk_packages(rul_project.__path__, 'rul_project.'):
@@ -130,7 +208,16 @@ for module in pkgutil.walk_packages(rul_project.__path__, 'rul_project.'):
 
 
 def test_unsupported_memory_model_is_rejected():
-    """Reject unsupported models in selected-array memory inspection."""
+    """Reject unsupported models in selected-array memory inspection.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     from rul_project.benchmark_performance import numerical_array_bytes
 
     with pytest.raises(TypeError, match="Unsupported model"):

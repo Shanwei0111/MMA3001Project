@@ -18,7 +18,19 @@ from rul_project.run_project import main
 
 @pytest.mark.parametrize("name", MODEL_NAMES)
 def test_all_models_share_the_documented_feature_order(name):
-    """Factories must accept every documented name and preserve the input schema."""
+    """Factories must accept every documented name and preserve the input schema.
+
+    Args:
+        name: Documented model name supplied by the parameterized case.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     expected = (
         ["cycle"]
         if name == "Age-only"
@@ -37,7 +49,16 @@ def test_all_models_share_the_documented_feature_order(name):
 
 
 def test_misspelled_model_name_is_rejected():
-    """A spelling mistake must not silently select a different estimator."""
+    """A spelling mistake must not silently select a different estimator.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     with pytest.raises(ValueError, match="Unknown model"):
         make_model("RandomForest")
 
@@ -67,7 +88,16 @@ def paired_example() -> pd.DataFrame:
 
 
 def test_paired_bootstrap_matches_known_constant_errors():
-    """Constant absolute errors give exact MAE/RMSE bounds and zero paired differences."""
+    """Constant absolute errors give exact MAE/RMSE bounds and zero paired differences.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     result = paired_bootstrap(paired_example(), repetitions=40)
     for metric in ("mae", "rmse"):
         np.testing.assert_allclose(
@@ -80,7 +110,19 @@ def test_paired_bootstrap_matches_known_constant_errors():
 
 @pytest.mark.parametrize("fault", ["duplicate", "engine", "label"])
 def test_paired_bootstrap_rejects_misaligned_engines(fault):
-    """An invalid pairing must fail rather than produce a convincing interval."""
+    """An invalid pairing must fail rather than produce a convincing interval.
+
+    Args:
+        fault: Specified duplicate-ID, engine-alignment or label-alignment defect.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     predictions = paired_example()
     if fault == "duplicate":
         predictions = pd.concat([predictions, predictions.iloc[[0]]], ignore_index=True)
@@ -94,7 +136,19 @@ def test_paired_bootstrap_rejects_misaligned_engines(fault):
 
 @pytest.mark.parametrize("repetitions", [0, -1, True, 1.5])
 def test_invalid_bootstrap_repetition_count_is_rejected(repetitions):
-    """Reject ambiguous or empty resampling requests."""
+    """Reject ambiguous or empty resampling requests.
+
+    Args:
+        repetitions: Invalid bootstrap replicate count supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     with pytest.raises(ValueError, match="positive integer"):
         paired_bootstrap(paired_example(), repetitions=repetitions)
 
@@ -118,7 +172,19 @@ def write_tiny_source(folder: Path) -> None:
 
 
 def test_test_labels_follow_engine_id_after_endpoint_selection(tmp_path):
-    """Reversed source rows must not swap official RUL labels between engines."""
+    """Reversed source rows must not swap official RUL labels between engines.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     write_tiny_source(tmp_path)
     endpoints = load_test_endpoints(tmp_path)
     assert endpoints["engine_id"].tolist() == [1, 2]
@@ -127,7 +193,19 @@ def test_test_labels_follow_engine_id_after_endpoint_selection(tmp_path):
 
 
 def test_cli_can_prepare_two_output_directories_in_one_process(tmp_path):
-    """Explicit path passing prevents a second invocation reusing cached paths."""
+    """Explicit path passing prevents a second invocation reusing cached paths.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     source = tmp_path / "data/raw"
     write_tiny_source(source)
     manifest = {
@@ -152,7 +230,19 @@ def test_cli_can_prepare_two_output_directories_in_one_process(tmp_path):
 
 
 def test_cli_protects_nested_reference_results(tmp_path):
-    """Reject output paths inside the frozen report evidence, including subfolders."""
+    """Reject output paths inside the frozen report evidence, including subfolders.
+
+    Args:
+        tmp_path: Isolated pathlib.Path temporary directory supplied by pytest.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     destination = tmp_path / "results/reference/metrics/accidental"
     with pytest.raises(SystemExit):
         main(
@@ -168,7 +258,16 @@ def test_cli_protects_nested_reference_results(tmp_path):
 
 
 def test_linear_operation_count_has_documented_units():
-    """A one-feature model requires two counted FLOPs and 32 assumed bytes."""
+    """A one-feature model requires two counted FLOPs and 32 assumed bytes.
+
+    Returns:
+        None: Assertions confirm the expected behavior.
+
+    Raises:
+        AssertionError: If observed behavior differs from the stated expectation.
+
+    Usage: Collected and executed by pytest.
+    """
     model = LinearRegression().fit([[1], [2]], [2, 1])
     estimate = operation_estimate(model, "Age-only", 1)
     assert estimate["estimated_flops"] == 2

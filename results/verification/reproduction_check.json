@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "file": "baseline_validation_predictions.csv",
+      "rows": 4291,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "multisensor_validation_predictions.csv",
+      "rows": 4291,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "random_forest_validation_predictions.csv",
+      "rows": 4291,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "hist_gradient_boosting_validation_predictions.csv",
+      "rows": 4291,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "official_test_predictions.csv",
+      "rows": 400,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "official_test_extended_metrics.csv",
+      "rows": 4,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "random_forest_group_cv.csv",
+      "rows": 5,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "hist_gradient_boosting_group_cv.csv",
+      "rows": 5,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "bootstrap_summary.csv",
+      "rows": 4,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "file": "extended_bootstrap_summary.csv",
+      "rows": 5,
+      "max_absolute_difference": 0.0
+    }
+  ],
+  "maximum_absolute_difference": 0.0,
+  "tolerance": {
+    "rtol": 1e-10,
+    "atol": 1e-08
+  },
+  "excluded": [
+    "timings",
+    "profiles",
+    "serialized size",
+    "selected private arrays"
+  ]
+}

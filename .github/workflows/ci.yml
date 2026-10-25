@@ -23,15 +23,15 @@ jobs:
           python -m pip install --no-build-isolation --no-deps -e .
       - name: Test production code and executable examples
         run: |
-          python -m pytest --junitxml=outputs/pytest_results.xml
-          python -m doctest src/rul_project/rul_utils.py
+          python -m pytest --junitxml=results/generated/pytest_results.xml
+          python -m doctest src/rul_project/prepare_dataset.py src/rul_project/rul_metrics.py src/rul_project/model_configuration.py
       - name: Check and regenerate API documentation
         run: |
-          python scripts/build_docs.py --check
-          python scripts/build_docs.py
-          git diff --exit-code -- docs/html docs/source_manifest.json
+          python tools/build_api_documentation.py --check
+          python tools/build_api_documentation.py
+          git diff --exit-code -- docs/api docs/source_manifest.json docs/project_guide.html START_HERE.html
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: pytest-report
-          path: outputs/pytest_results.xml
+          path: results/generated/pytest_results.xml

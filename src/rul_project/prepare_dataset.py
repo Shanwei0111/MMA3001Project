@@ -90,7 +90,7 @@ def prepare_training_data(data_dir: Path, output_dir: Path) -> pd.DataFrame:
         ValueError: If source columns or engine-cycle keys are invalid.
         OSError: If data cannot be read or written.
 
-    Example: prepare_training_data(Path("data/raw"), Path("outputs")) .
+    Example: prepare_training_data(Path("data/raw"), Path("results/generated")).
     """
     data = add_training_rul(read_history(data_dir / "train_FD001.txt"))
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -117,7 +117,7 @@ def save_engine_split(output_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
         ValueError: If engine IDs or the requested split are invalid.
         OSError: If split CSVs cannot be written.
 
-    Example: save_engine_split(Path("outputs")); uses seed 42 and 80 training engines.
+    Example: save_engine_split(Path("results/generated")); uses seed 42 and 80 training engines.
     """
     data = pd.read_csv(output_dir / "train_FD001_labeled.csv")
     train, validation = split_by_engine(data, n_train=80, random_state=42)

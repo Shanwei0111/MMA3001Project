@@ -1,13 +1,160 @@
-# Turbofan Remaining Useful Life - NASA C-MAPSS FD001
+# Turbofan Remaining Useful Life Prediction
 
 **Chua Shanwei · 35393343 · MMA3001 Numerical Methods and Machine Learning**
 
-Estimate cycles to simulated engine failure from operating age and six
-gas-path sensors. The current submission compares **age-only linear regression,
-multi-sensor linear regression, random forest (RF), and histogram gradient
-boosting (HGB)** using the student's current `Assignment` experiments.
+Estimate the remaining operating cycles of NASA C-MAPSS FD001 engines using
+age-only linear regression, multi-sensor linear regression, random forest and
+histogram gradient boosting. The code reproduces the student's current
+Assignment results with engine-level validation and quantitative performance analysis.
 
-## Results and report
+**Opening the downloaded ZIP? Start with `START_HERE.html`.** It links directly
+to the guide, HTML API documentation, licensing and readable test report.
+
+## Required repository contents
+
+| Requirement | Location | What to open |
+|---|---|---|
+| README and complete workflow instructions | This file | README.md or START_HERE.html |
+| Generated HTML source-code documentation | [docs/api/](docs/api/index.html) | docs/api/index.html in a browser |
+| Licensing agreement | [LICENSE](LICENSE) | MIT for original code; [NASA attribution](data/README.md) is separate |
+| Functional source with comments and docstrings | [src/rul_project/](src/rul_project/) | Purpose-named modules listed below |
+| Test functions and test report | [tests/](tests/README.md) | [Readable HTML report](tests/reports/pytest_report.html) and [pytest XML](tests/reports/pytest_results.xml) |
+| Final accessible repository and zipped clone | [GitHub main](https://github.com/Shanwei0111/MMA3001Project) | Repository link for review; zipped clone for Moodle |
+
+## Folder layout
+
+```text
+MMA3001Project/
+├── START_HERE.html                Clickable entry point for the local clone
+├── README.md                      Purpose, setup and reproduction commands
+├── LICENSE                        Original source-code license
+├── pyproject.toml                 Package metadata and test configuration
+├── requirements.txt               Main dependencies
+├── requirements-lock.txt          Exact verified environment, including transitive packages
+├── src/rul_project/               Reusable, documented Python source
+├── tests/
+│   ├── test_data_and_metrics.py   RUL labels, grouping and hand-calculated errors
+│   ├── test_repository_contracts.py  Data integrity, fixed settings and safe imports
+│   ├── test_workflow_functions.py   Endpoint pairing, uncertainty and path handling
+│   └── reports/                  Latest recorded HTML and XML test reports
+├── docs/
+│   ├── project_guide.html         Browser version of this README
+│   ├── api/                      pdoc pages generated from current source
+│   └── DEVELOPMENT.md            Actual branch history, refactor map and AI disclosure
+├── data/
+│   ├── README.md                 NASA source, access and dataset attribution
+│   ├── manifest.json             Original FD001 SHA-256 fingerprints
+│   └── raw/                      Verified source files; ignored by public Git history
+├── results/
+│   ├── reference/                Frozen report evidence, grouped by purpose
+│   ├── verification/             Reproduction checks and source fingerprints
+│   └── generated/                Ignored output from your new experiment runs
+├── reports/                      Written project PDF and editable report text
+├── tools/                        Documentation, verification and ZIP utilities
+└── .github/workflows/            Automated tests and documentation synchronization
+```
+
+The hidden `.git` folder in a cloned repository stores version history. It is
+not project code. The submission ZIP retains it so the clone includes its history.
+Generated caches, environments and rerun outputs are excluded from the ZIP.
+
+## Source files: where to read each part
+
+| Python file in src/rul_project | Responsibility |
+|---|---|
+| `model_configuration.py` | Four estimator factories, random seed and ordered input features |
+| `prepare_dataset.py` | Source parsing, uncapped training RUL, grouped splitting and test endpoint alignment |
+| `train_models.py` | Baseline/ensemble training, five-fold grouped CV and forest depth study |
+| `evaluate_test_set.py` | Final refitting, raw/clipped test metrics and retained failure cases |
+| `rul_metrics.py` | MAE, RMSE, bias, overprediction percentage and asymmetric 13/10 score |
+| `analyse_uncertainty.py` | Paired engine bootstrap for RF, HGB and multi-sensor linear regression |
+| `benchmark_performance.py` | Timings, profiles, selected-array memory and operation estimates |
+| `plot_model_results.py` | Validation baseline, official diagnostics and comparison figures |
+| `data_access.py` | Verified local copying or official NASA archive acquisition |
+| `run_project.py` | Explicit stage order and command-line path handling |
+| `__main__.py`, `__init__.py` | Standard Python package entry points |
+
+Functions receive explicit inputs and return tables or write clearly documented
+files. Models and feature order are defined once in `model_configuration.py`.
+Importing a module does not start an experiment. Google-style docstrings specify
+parameters, returns, exceptions and usage; inline comments explain design choices.
+
+## Environment and installation
+
+The verified environment is **CPython 3.14.5 on Windows 11** with NumPy 2.5.4,
+pandas 3.1.0, SciPy 1.18.1, scikit-learn 1.9.1, Matplotlib 3.11.2,
+threadpoolctl 3.7.0, pytest 9.1.1 and pdoc 16.0.0. All 30 dependency/build-tool
+versions are pinned in `requirements-lock.txt`. Python 3.14 is required.
+
+Run these commands from the repository root:
+
+```powershell
+git clone https://github.com/Shanwei0111/MMA3001Project.git
+cd MMA3001Project
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.venv\Scripts\python.exe -m pip install --no-build-isolation --no-deps -e .
+.venv\Scripts\Activate.ps1
+```
+
+If activation is restricted, use `.venv\Scripts\python.exe` in place of `python`.
+On Linux/macOS, the equivalent interpreter is `.venv/bin/python`; the recorded
+benchmark and exact environment verification were performed on Windows.
+
+## Data preparation
+
+The three required raw files are `train_FD001.txt`, `test_FD001.txt` and
+`RUL_FD001.txt`. Use one of the following acquisition methods:
+
+```powershell
+# Existing NASA folder supplied by the student
+python -m rul_project data --data-source "../CMAPSSData"
+
+# Or download the archive linked by NASA's official catalog
+python -m rul_project data --download-data
+```
+
+The Moodle ZIP already includes the verified FD001 files. Run
+`python -m rul_project data` to check them. Public Git history excludes the raw
+files; [data/manifest.json](data/manifest.json) verifies exact bytes. Corrupt or
+changed files are rejected without overwrite. [data/README.md](data/README.md)
+explains the data source, original units and licensing boundary.
+
+## Reproduce the project
+
+```powershell
+python -m pytest --junitxml=results/generated/pytest_results.xml
+python -m rul_project all
+python tools/verify_reproducibility.py
+python tools/build_api_documentation.py --check
+```
+
+Allow several minutes for the complete workflow. The all command prepares
+labels, splits engines, trains all candidates, repeats grouped CV, evaluates
+official endpoints, bootstraps uncertainty, plots results and profiles cost.
+All fits use the same one-thread budget and seed 42. No windows, smoothing,
+feature scaling, engine weights or capped RUL targets are introduced.
+
+Individual stages are available in this dependency order:
+
+```powershell
+python -m rul_project prepare-data
+python -m rul_project split-engines
+python -m rul_project train-linear
+python -m rul_project train-forest
+python -m rul_project train-hgb
+python -m rul_project evaluate-test
+python -m rul_project analyse-uncertainty
+python -m rul_project plot-results
+python -m rul_project benchmark
+```
+
+`results/generated/` holds the run's CSVs, figures and profiles. Use
+`--output-dir results/generated/trial` for a separate run; `--data-dir` overrides
+the raw source directory. The protected reference results cannot be chosen as
+an output directory. Earlier command spellings remain accepted for old notes.
+
+## Results and engineering comparison
 
 | Model | Test MAE (cycles) | Test RMSE (cycles) | NASA-style score |
 |---|---:|---:|---:|
@@ -16,169 +163,63 @@ boosting (HGB)** using the student's current `Assignment` experiments.
 | Random forest | 19.38 | 25.82 | 5804.70 |
 | Histogram gradient boosting | 18.93 | 26.18 | 7212.36 |
 
-These values use one final observed endpoint per official test engine (100
-engines). RF was retained for RMSE and asymmetric-score performance. HGB is
-faster and smaller; paired HGB-minus-RF error intervals include zero. The
-report explains test reuse, positive bias and the uncertainty limitations.
+All models use the same 100 official test endpoints. RF was retained for RMSE
+and asymmetric-score performance; HGB is faster and smaller. Paired HGB-minus-RF
+error intervals include zero. The [written report](reports/MMA3001_Chua_Shanwei_35393343_Written_Project_Documentation.pdf)
+contains the equations, physical input units, complete validation, hardware
+benchmarks and interpretation of optimistic errors.
 
-- [Written project documentation (PDF)](reports/MMA3001_Chua_Shanwei_35393343_Written_Project_Documentation.pdf)
-- [Editable report text](reports/MMA3001_Chua_Shanwei_35393343_Written_Project_Documentation.md)
-- [HTML API documentation](docs/html/index.html): open after cloning, or serve locally below.
-- [Original report evidence](evidence/reported/) and [source provenance](evidence/source_provenance.json).
-- [Testing guide and reports](docs/TESTING.md), [method and I/O](docs/METHOD.md),
-  [development history](docs/DEVELOPMENT.md), [AI assistance record](docs/AI_USE.md).
+[results/reference/](results/reference/README.md) groups frozen metrics,
+predictions, uncertainty, performance and figures into separate subfolders.
+The original numbers are preserved. `file_index.json` connects original CSV
+names to their new locations. Verification compares both validation and test
+predictions, both CV tables and both bootstrap tables; timings are machine-specific.
 
-## Environment and installation
+## Tests, HTML documentation and maintenance
 
-The recorded experiment uses **CPython 3.14.5**, NumPy 2.5.4, pandas 3.1.0,
-SciPy 1.18.1, scikit-learn 1.9.1, Matplotlib 3.11.2 and threadpoolctl 3.7.0.
-Python 3.14 is required by this pinned environment. README commands run from
-the repository root. `requirements-lock.txt` pins all 30 verified packages,
-including transitive dependencies and the build backend. `requirements.txt`
-lists the main runtime/test/documentation dependencies. Use a separate output
-directory for an independent rerun.
+See [tests/README.md](tests/README.md) for coverage and the recorded report.
+The organized suite currently contains **61 passing tests**. The refactor was
+also checked against all four validation-prediction tables and the official
+test/CV/bootstrap results, with maximum numeric difference **0.0**.
+Read [results/verification/README.md](results/verification/README.md) for the
+fresh-clone check and reproduction tolerance. The report's historical 36-test
+evidence is retained separately from the current suite.
 
-```powershell
-git clone https://github.com/Shanwei0111/MMA3001Project.git
-cd MMA3001Project
-python --version
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
-.venv\Scripts\python.exe -m pip install --no-build-isolation --no-deps -e .
-```
-
-In the commands below, `python` means this virtual environment's interpreter;
-activate it with `.venv\Scripts\Activate.ps1`, or use its full path. On
-Linux/macOS use `.venv/bin/python` and `source .venv/bin/activate`.
-
-## Obtain the exact data
-
-Raw NASA files are excluded from public Git history and are not licensed as
-project code. Follow [data attribution and access](data/README.md). Three
-files are required: `train_FD001.txt`, `test_FD001.txt`, `RUL_FD001.txt`.
-Acquire them using **one** of these options:
+API documentation is generated directly from the source:
 
 ```powershell
-# Copy the student's existing NASA files, validating their SHA-256 hashes.
-python -m rul_project data --data-source "../CMAPSSData"
-
-# Or explicitly download the NASA archive linked by its official catalog.
-python -m rul_project data --download-data
+python tools/build_api_documentation.py
+python tools/build_api_documentation.py --check
+python -m http.server 8000
 ```
 
-Alternatively, put unmodified files in `data/raw/` and run `python -m
-rul_project data`. [data/manifest.json](data/manifest.json) records source
-fingerprints and byte counts. Mismatched files are rejected without overwrite.
+Open `http://localhost:8000/START_HERE.html`, or double-click `START_HERE.html`
+in the local clone. API pages include View Source links and parameter/return
+contracts. GitHub displays HTML file contents as source; local browser pages
+provide the rendered version. The source manifest and CI reject stale docs;
+CI also regenerates pages and checks that no differences appear.
 
-## Reproduce the workflow
+## History, licensing and submission
+
+Meaningful changes are recorded on `refactor/organized-submission` before
+integration into `main`. Earlier versions remain in Git history and on
+`archive/reference-implementation`. [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
+maps the learning scripts to the organized modules and discloses the actual
+development chronology and AI-assisted repository work.
+
+[LICENSE](LICENSE) covers original code and documentation. NASA data and
+third-party libraries retain separate terms; see
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and [data/README.md](data/README.md).
+
+Final review link: **https://github.com/Shanwei0111/MMA3001Project**
+
+After committing and pushing, create the required zipped clone:
 
 ```powershell
-python -m pytest --junitxml=outputs/pytest_results.xml
-python -m rul_project all
-python scripts/verify_reproduction.py --output-dir outputs
-python scripts/build_docs.py
-python scripts/build_docs.py --check
+python tools/create_submission_zip.py --destination ../MMA3001_Chua_Shanwei_35393343_Repository_Clone.zip --data-source data/raw
 ```
 
-The full run includes development fitting, the RF depth study, five grouped
-folds for each ensemble, official testing, timing/profiling, plots and paired
-bootstrap. Allow several minutes on a laptop. Models are fitted on one
-computation thread, with random seed 42. Predictions/metrics should reproduce
-within the verification tolerance; timings and platform-dependent storage
-inspection may change. No feature scaling, smoothing, windows, RUL cap or
-engine weighting is introduced during packaging.
-
-A clean Git clone in a new environment without inherited packages passed all
-44 tests and the executable API examples. The full workflow reproduced all 400
-official predictions, both grouped CV tables and the paired bootstrap tables
-with a maximum absolute difference of **0.0**. See
-[verification details](docs/VERIFICATION.md), the
-[readable test report](evidence/verification/pytest_report.html) and
-[machine-readable evidence](evidence/verification/clean_clone_verification.json).
-
-`outputs/` contains rerun results and is ignored by Git. `evidence/reported/`
-is the frozen evidence behind the written report. Never replace old benchmark
-times with a new run without recording the changed hardware and procedure.
-The CLI rejects using the frozen evidence directory as its output destination.
-
-Individual learning stages can also be run in this dependency order:
-
-```powershell
-python -m rul_project preparedata
-python -m rul_project splitdata
-python -m rul_project linear_models
-python -m rul_project randomforest
-python -m rul_project histgradientboosting
-python -m rul_project testevaluation
-python -m rul_project plotbaseline
-python -m rul_project performance
-python -m rul_project uncertainty
-```
-
-The eight original learning scripts map to the first eight stage modules in
-`src/rul_project/steps/`; `uncertainty` reproduces the later HGB report analysis.
-All stages have main guards. Importing them for pdoc or tests performs no I/O,
-training or plotting. `python -m rul_project --help` lists path overrides:
-
-```powershell
-python -m rul_project all --data-dir data/raw --output-dir outputs/independent
-```
-
-## Repository layout
-
-```text
-src/rul_project/          Shared API, CLI, validated data access and learning stages
-tests/                   Production-function tests and workflow contract checks
-data/                    Dataset attribution and source SHA-256 manifest
-docs/html/               Generated pdoc API pages (committed and checked in CI)
-docs/                    Method, testing, development and AI-use notes
-evidence/reported/       Original metrics, predictions, plots and test evidence
-evidence/verification/   Fresh-clone verification and current test reports
-reports/                 Written report PDF and editable text
-scripts/                 Documentation, reproduction and zipped-clone utilities
-.github/workflows/       Tests and documentation synchronization checks
-outputs/                 Ignored regenerated results
-```
-
-## Read the API documentation
-
-GitHub displays HTML source files as source code. To read the rendered pages:
-
-```powershell
-python -m http.server 8000 --directory docs/html
-```
-
-Open `http://localhost:8000/`. Rebuild after changing any Python API:
-`python scripts/build_docs.py`. The source manifest includes all package and
-support scripts; `--check` verifies fingerprints and committed HTML. Docstrings
-use Google style with inputs, returns, exceptions and usage. See
-[docs/DOCUMENTATION.md](docs/DOCUMENTATION.md).
-
-## Version history and submission
-
-The earlier reference implementation used different features and models. It is
-preserved on `archive/reference-implementation`, while `main` contains this
-current four-model workflow. [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) explains
-the transition and the actual packaging commits; no past development dates or
-student actions have been invented.
-
-Final accessible repository: https://github.com/Shanwei0111/MMA3001Project
-
-To produce the required zipped clone after committing and pushing:
-
-```powershell
-python scripts/package_submission.py --destination ../MMA3001_Chua_Shanwei_35393343_Repository_Clone.zip --data-source data/raw
-```
-
-This clones remote `main` into a fresh directory, verifies and adds the locally
-supplied raw FD001 files, and zips the clone including its Git metadata. No
-virtual environment, caches or generated rerun output are included. Submit
-that ZIP through Moodle and submit the written PDF separately as required.
-
-## Licensing and acknowledgements
-
-[MIT](LICENSE) covers original project code and documentation. NASA data and
-third-party packages have their own terms; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-and [data/README.md](data/README.md). Data access is public; the inspected NASA
-catalog does not specify a dataset license. AI-assisted implementation and
-drafting are disclosed in the report and [docs/AI_USE.md](docs/AI_USE.md).
+The utility clones published remote main into an empty temporary directory,
+adds verified local FD001 data and zips it with Git history. Submit this ZIP
+through Moodle; submit the written report separately. Use `--overwrite` only
+when intentionally replacing an older ZIP at the same path.

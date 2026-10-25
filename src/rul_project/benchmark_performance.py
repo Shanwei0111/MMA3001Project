@@ -19,6 +19,7 @@ import sklearn
 from sklearn.base import clone
 from sklearn.ensemble import HistGradientBoostingRegressor, RandomForestRegressor
 from sklearn.linear_model import LinearRegression
+from threadpoolctl import threadpool_limits
 
 from rul_project.model_configuration import MODEL_NAMES, feature_columns, make_model
 
@@ -49,7 +50,7 @@ def save_training_profile(
         ValueError: If cloning or fitting rejects the model/data.
         OSError: If profile files cannot be written.
 
-    Example: save_training_profile("RF", make_model("Random forest"), X, y, Path("outputs")).
+    Example: save_training_profile("RF", make_model("Random forest"), X, y, Path("results/generated")).
     """
     model = clone(template)
     profiler = cProfile.Profile()
@@ -156,7 +157,28 @@ def run_performance_benchmark(output_dir: Path) -> dict[str, pd.DataFrame]:
         ValueError: If tables are empty/duplicated or estimator inputs are invalid.
         OSError: If evidence cannot be saved.
 
-    Example: run_performance_benchmark(Path("outputs")). The CLI limits computation to one thread.
+    Example: run_performance_benchmark(Path("results/generated")). Uses one thread even outside the CLI.
+    """
+    # Enforce the advertised timing budget for direct API callers as well as the CLI.
+    with threadpool_limits(limits=1):
+        return _benchmark_tables(output_dir)
+
+
+def _benchmark_tables(output_dir: Path) -> dict[str, pd.DataFrame]:
+    """Collect benchmark tables while the public caller holds the thread limit.
+
+    Args:
+        output_dir: Directory containing prepared training and endpoint CSVs.
+
+    Returns:
+        dict[str, pandas.DataFrame]: Saved runtime, memory and operation tables.
+
+    Raises:
+        FileNotFoundError: If prepared inputs are absent.
+        ValueError: If tables or estimator inputs are invalid.
+        OSError: If benchmark evidence cannot be written.
+
+    Internal usage: called only by run_performance_benchmark inside its thread context.
     """
     train = pd.read_csv(output_dir / "train_FD001_labeled.csv")
     endpoints = pd.read_csv(output_dir / "test_endpoints_labeled.csv")

@@ -1,5 +1,11 @@
 # NASA C-MAPSS FD001 data
 
+The predictors are cycle (cycles), sensor_2/T24, sensor_3/T30 and sensor_4/T50
+(Rankine), sensor_7/P30 and sensor_11/Ps30 (psia), and sensor_9/Nc (rpm).
+IDs are grouping keys, not predictors. Training RUL is uncapped cycles to the
+last recorded failure cycle; official labels refer only to each engine's final
+observed test record. The report's Section 2 gives observed input ranges.
+
 Source: National Aeronautics and Space Administration, Prognostics Center of
 Excellence. [Official catalog](https://catalog.data.gov/dataset/cmapss-jet-engine-simulated-data).
 [NASA archive](https://data.nasa.gov/docs/legacy/CMAPSSData.zip).

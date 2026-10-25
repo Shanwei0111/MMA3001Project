@@ -23,7 +23,7 @@ def plot_age_baseline(results: pd.DataFrame, destination: Path) -> None:
         KeyError: If required prediction columns are missing.
         OSError: If the figure cannot be written.
 
-    Example: plot_age_baseline(results, Path("outputs/age_only_baseline.png")).
+    Example: plot_age_baseline(results, Path("results/generated/age_only_baseline.png")).
     """
     line = results.sort_values("cycle")
     fig, ax = plt.subplots(figsize=(9, 5))
@@ -149,7 +149,7 @@ def plot_metric_comparison(metrics: pd.DataFrame, destination: Path) -> None:
         KeyError: If a required model or metric is absent.
         OSError: If the figure cannot be written.
 
-    Example: plot_metric_comparison(metrics, Path("outputs/official_test_model_comparison.png")).
+    Example: plot_metric_comparison(metrics, Path("results/generated/official_test_model_comparison.png")).
     """
     ordered = metrics.set_index("model").loc[list(MODEL_NAMES)]
     labels = [
@@ -190,7 +190,7 @@ def generate_result_figures(output_dir: Path) -> None:
         ValueError: If a required model has missing/duplicated engine predictions.
         OSError: If any figure cannot be saved.
 
-    Example: generate_result_figures(Path("outputs")). Uses Times New Roman when available.
+    Example: generate_result_figures(Path("results/generated")). Uses Times New Roman when available.
     """
     predictions = pd.read_csv(output_dir / "official_test_predictions.csv")
     metrics = pd.read_csv(output_dir / "official_test_extended_metrics.csv")

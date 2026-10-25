@@ -98,7 +98,7 @@ def evaluate_official_test(data_dir: Path, output_dir: Path) -> pd.DataFrame:
         ValueError: If label alignment or estimator inputs are invalid.
         OSError: If results cannot be written.
 
-    Example: evaluate_official_test(Path("data/raw"), Path("outputs")).
+    Example: evaluate_official_test(Path("data/raw"), Path("results/generated")).
     """
     train = pd.read_csv(output_dir / "train_FD001_labeled.csv")
     endpoints = load_test_endpoints(data_dir)

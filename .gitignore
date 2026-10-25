@@ -6,6 +6,8 @@ __pycache__/
 build/
 dist/
 outputs/
+results/generated/
+results/generated-tests/
 data/raw/*
 !data/raw/.gitkeep
 *.zip

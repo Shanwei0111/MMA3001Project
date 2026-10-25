@@ -1,4 +1,5 @@
 """Check data integrity, frozen settings, production-test targets and safe imports."""
+
 from pathlib import Path
 import hashlib
 import json
@@ -8,7 +9,8 @@ import sys
 
 import pytest
 
-from rul_project import rul_utils
+from rul_project import prepare_dataset
+from rul_project.model_configuration import make_hist_gradient_boosting
 from rul_project.data_access import prepare_data, verify_data
 
 
@@ -23,22 +25,42 @@ def fixture_manifest(folder: Path) -> Path:
     """
     content = b"1 1 0\n"
     path = folder / "manifest.json"
-    path.write_text(json.dumps({"example.txt": {"sha256": hashlib.sha256(content).hexdigest(), "bytes": len(content)}}), encoding="utf-8")
+    path.write_text(
+        json.dumps(
+            {
+                "example.txt": {
+                    "sha256": hashlib.sha256(content).hexdigest(),
+                    "bytes": len(content),
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
     return path
 
 
 def test_split_tests_target_the_production_function():
     """Reject a duplicate test helper that masks production split behavior."""
-    from test_rul_utils import split_by_engine
-    assert split_by_engine is rul_utils.split_by_engine
+    from test_data_and_metrics import split_by_engine
+
+    assert split_by_engine is prepare_dataset.split_by_engine
 
 
 def test_hgb_configuration_matches_report():
     """Detect changes to the frozen HGB parameters rather than silently retuning."""
-    parameters = rul_utils.make_hist_gradient_boosting().get_params()
-    expected = {"loss": "squared_error", "learning_rate": .05, "max_iter": 200,
-                "max_leaf_nodes": 15, "max_depth": 4, "min_samples_leaf": 20,
-                "l2_regularization": 1.0, "max_bins": 255, "early_stopping": False, "random_state": 42}
+    parameters = make_hist_gradient_boosting().get_params()
+    expected = {
+        "loss": "squared_error",
+        "learning_rate": 0.05,
+        "max_iter": 200,
+        "max_leaf_nodes": 15,
+        "max_depth": 4,
+        "min_samples_leaf": 20,
+        "l2_regularization": 1.0,
+        "max_bins": 255,
+        "early_stopping": False,
+        "random_state": 42,
+    }
     for name, value in expected.items():
         assert parameters[name] == value
 
@@ -67,7 +89,9 @@ def test_local_data_copy_preserves_bytes(tmp_path):
     (original / "example.txt").write_bytes(b"1 1 0\n")
     destination = tmp_path / "raw"
     prepare_data(destination, manifest, source=original)
-    assert (destination / "example.txt").read_bytes() == (original / "example.txt").read_bytes()
+    assert (destination / "example.txt").read_bytes() == (
+        original / "example.txt"
+    ).read_bytes()
 
 
 def test_wrong_local_source_creates_no_raw_payload(tmp_path):
@@ -92,7 +116,13 @@ for module in pkgutil.walk_packages(rul_project.__path__, 'rul_project.'):
     environment = os.environ.copy()
     environment["RUL_DATA_DIR"] = str(tmp_path / "absent_data")
     environment["RUL_OUTPUT_DIR"] = str(tmp_path / "absent_outputs")
-    result = subprocess.run([sys.executable, "-c", code], cwd=tmp_path, env=environment, capture_output=True, text=True)
+    result = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=tmp_path,
+        env=environment,
+        capture_output=True,
+        text=True,
+    )
     assert result.returncode == 0, result.stderr
     assert result.stdout == ""
     assert not (tmp_path / "absent_data").exists()
@@ -101,6 +131,7 @@ for module in pkgutil.walk_packages(rul_project.__path__, 'rul_project.'):
 
 def test_unsupported_memory_model_is_rejected():
     """Reject unsupported models in selected-array memory inspection."""
-    from rul_project.steps.performance import numerical_array_bytes
+    from rul_project.benchmark_performance import numerical_array_bytes
+
     with pytest.raises(TypeError, match="Unsupported model"):
         numerical_array_bytes(object())

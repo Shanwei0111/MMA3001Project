@@ -4,11 +4,11 @@ NASA data is attributed in data/README.md and is not covered by this project's
 MIT license. Only the three named archive members are copied; paths in remote
 archives are never extracted directly onto the filesystem.
 """
+
 from pathlib import Path
 import hashlib
 import io
 import json
-import shutil
 import urllib.request
 import zipfile
 
@@ -37,14 +37,26 @@ def verify_data(data_dir: Path, manifest_path: Path) -> dict:
     for name, record in manifest.items():
         path = data_dir / name
         if not path.is_file():
-            raise FileNotFoundError(f"Missing {path}. Run the data stage with --data-source or --download-data.")
+            raise FileNotFoundError(
+                f"Missing {path}. Run the data stage with --data-source or --download-data."
+            )
         content = path.read_bytes()
-        if len(content) != record["bytes"] or hashlib.sha256(content).hexdigest() != record["sha256"]:
-            raise ValueError(f"Source fingerprint mismatch: {name}; obtain the original unmodified FD001 file.")
+        if (
+            len(content) != record["bytes"]
+            or hashlib.sha256(content).hexdigest() != record["sha256"]
+        ):
+            raise ValueError(
+                f"Source fingerprint mismatch: {name}; obtain the original unmodified FD001 file."
+            )
     return manifest
 
 
-def prepare_data(data_dir: Path, manifest_path: Path, source: Path | None = None, download: bool = False) -> dict:
+def prepare_data(
+    data_dir: Path,
+    manifest_path: Path,
+    source: Path | None = None,
+    download: bool = False,
+) -> dict:
     """Populate raw data from a local NASA folder or the official NASA archive.
 
     Args:
@@ -72,8 +84,13 @@ def prepare_data(data_dir: Path, manifest_path: Path, source: Path | None = None
     data_dir.mkdir(parents=True, exist_ok=True)
     for name, record in manifest.items():
         existing = data_dir / name
-        if existing.exists() and hashlib.sha256(existing.read_bytes()).hexdigest() != record["sha256"]:
-            raise ValueError(f"Refusing to overwrite a mismatched existing file: {existing}")
+        if (
+            existing.exists()
+            and hashlib.sha256(existing.read_bytes()).hexdigest() != record["sha256"]
+        ):
+            raise ValueError(
+                f"Refusing to overwrite a mismatched existing file: {existing}"
+            )
     payloads = {}
     if source is not None:
         payloads = {name: (source / name).read_bytes() for name in manifest}
@@ -85,13 +102,17 @@ def prepare_data(data_dir: Path, manifest_path: Path, source: Path | None = None
             raise ValueError("NASA archive exceeds the 100 MB acquisition limit.")
         with zipfile.ZipFile(io.BytesIO(archive_bytes)) as archive:
             for name in manifest:
-                matches = [item for item in archive.namelist() if Path(item).name == name]
+                matches = [
+                    item for item in archive.namelist() if Path(item).name == name
+                ]
                 if len(matches) != 1:
                     raise ValueError(f"Expected one archive member named {name}.")
                 payloads[name] = archive.read(matches[0])
     for name, content in payloads.items():
         if hashlib.sha256(content).hexdigest() != manifest[name]["sha256"]:
-            raise ValueError(f"Acquired data does not match the recorded source: {name}")
+            raise ValueError(
+                f"Acquired data does not match the recorded source: {name}"
+            )
     for name, content in payloads.items():
         if not (data_dir / name).exists():
             (data_dir / name).write_bytes(content)

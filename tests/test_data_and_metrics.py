@@ -4,11 +4,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from rul_project.rul_utils import (
-    add_training_rul,
-    split_by_engine,
-    evaluate_rul,
-)
+from rul_project.prepare_dataset import add_training_rul, split_by_engine
+from rul_project.rul_metrics import evaluate_rul
 
 
 def test_rul_matches_hand_calculation():
@@ -133,12 +130,8 @@ def test_engine_split_is_reproducible():
         }
     )
 
-    train_a, validation_a = split_by_engine(
-        data, n_train=2, random_state=42
-    )
-    train_b, validation_b = split_by_engine(
-        data, n_train=2, random_state=42
-    )
+    train_a, validation_a = split_by_engine(data, n_train=2, random_state=42)
+    train_b, validation_b = split_by_engine(data, n_train=2, random_state=42)
 
     pd.testing.assert_frame_equal(train_a, train_b)
     pd.testing.assert_frame_equal(validation_a, validation_b)
@@ -176,6 +169,7 @@ def test_missing_engine_id_value_is_rejected():
     with pytest.raises(ValueError, match="must not be missing"):
         split_by_engine(data, n_train=1)
 
+
 def test_perfect_predictions_have_zero_error():
     scores = evaluate_rul(
         [0, 10, 100],
@@ -204,12 +198,8 @@ def test_overprediction_receives_larger_penalty():
     early = evaluate_rul([20], [10])
     late = evaluate_rul([20], [30])
 
-    assert early["nasa_score"] == pytest.approx(
-        np.exp(10 / 13) - 1
-    )
-    assert late["nasa_score"] == pytest.approx(
-        np.exp(10 / 10) - 1
-    )
+    assert early["nasa_score"] == pytest.approx(np.exp(10 / 13) - 1)
+    assert late["nasa_score"] == pytest.approx(np.exp(10 / 10) - 1)
     assert late["nasa_score"] > early["nasa_score"]
 
 

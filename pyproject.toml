@@ -16,11 +16,12 @@ dependencies = ["numpy==2.5.4", "pandas==3.1.0", "scipy==1.18.1", "scikit-learn=
 dev = ["pytest==9.1.1", "pdoc==16.0.0"]
 
 [project.scripts]
-rul-project = "rul_project.cli:main"
+rul-project = "rul_project.run_project:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-    addopts = "-ra --basetemp=outputs/pytest-tmp"
+addopts = "-ra --basetemp=results/generated-tests"
+cache_dir = "results/generated/pytest-cache"

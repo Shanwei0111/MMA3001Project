@@ -1,9 +1,9 @@
-"""NASA FD001 remaining useful life experiments for MMA3001.
+"""NASA FD001 remaining useful life project - purpose-named, reusable modules.
 
-Public numerical helpers are in `rul_project.rul_utils`. The numbered learning
-stages are available in `rul_project.steps`; importing a stage never trains
-models, reads data or creates output files. Use the command-line workflow in
-`rul_project.cli` to execute stages explicitly.
+Start with prepare_dataset, model_configuration and rul_metrics for data and
+mathematical contracts. train_models, evaluate_test_set and analyse_uncertainty
+implement the experiments. benchmark_performance and plot_model_results produce
+performance evidence and figures. Use python -m rul_project all to run them.
 """
 
 __version__ = "1.0.0"

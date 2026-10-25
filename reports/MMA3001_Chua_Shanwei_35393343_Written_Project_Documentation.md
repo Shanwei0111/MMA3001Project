@@ -128,7 +128,7 @@ The four final models were fitted to the same 20,631 training rows and evaluated
 
 Table 3. Official endpoint evaluation after nonnegative clipping; N = 100 engines. MAE, RMSE and bias are in cycles. The asymmetric score is dimensionless and summed, not averaged.
 
-![Figure 1. Saved four-model comparison on identical official endpoints. Lower MAE and RMSE are preferred.](../evidence/reported/official_test_model_comparison.png)
+![Figure 1. Saved four-model comparison on identical official endpoints. Lower MAE and RMSE are preferred.](../results/reference/figures/official_test_model_comparison.png)
 
 RF reduced RMSE by 34.32% relative to age-only LR and 18.88% relative to multi-sensor LR. HGB achieved the lowest MAE at 18.93 cycles, whereas RF achieved lower RMSE (25.82 versus 26.18) and asymmetric score (5804.70 versus 7212.36). This difference reflects the influence of large errors: HGB overpredicted fewer engines, but some overpredictions attracted much larger exponential penalties. Bias must also be read alongside MAE and RMSE, since positive and negative errors can cancel. The lower bias of age-only LR therefore does not indicate better overall accuracy than multi-sensor LR.
 
@@ -200,7 +200,7 @@ Sampling uncertainty was estimated by resampling the 100 official endpoint IDs w
 
 Table 5. Estimates and paired percentile intervals in cycles. HGB - RF intervals include zero; neither error metric establishes a clear winner between these ensembles.
 
-![Figure 2. RF (top) and HGB (bottom), with shared axis limits and histogram bins. Above-diagonal points and positive errors indicate overestimated life.](../evidence/reported/rf_hgb_test_diagnostics.png)
+![Figure 2. RF (top) and HGB (bottom), with shared axis limits and histogram bins. Above-diagonal points and positive errors indicate overestimated life.](../results/reference/figures/rf_hgb_test_diagnostics.png)
 
 RF overpredicted 69 engines, with a bias of +11.48 cycles; HGB overpredicted 65, with a bias of +10.86. Engine 1 illustrates the effect of error magnitude. At cycle 31 its true RUL was 112, compared with predictions of 185.52 from RF (+73.52) and 192.12 from HGB (+80.12). The corresponding penalties were 1559.04 and 3016.72. Engines 1, 15 and 67 contributed 68.18% of RF's total score and 71.83% of HGB's. All cases were retained. Thus, HGB's lower overprediction frequency was outweighed by its larger penalties on a few engines.
 
@@ -278,7 +278,7 @@ Batch prediction spread the call overhead across multiple engines. RF processed 
 
 Table 9. Per-prediction analytical counts for the fitted ensembles. Comparisons are not floating-point arithmetic. RF averages tree outputs; HGB adds scaled tree outputs to its baseline.
 
-Although HGB contains more trees, it has far fewer nodes in total. Inference visits one path through each tree. Summing the actual maximum depths gives an upper bound of 800 threshold comparisons for both ensembles, but their runtime still depends on path lengths, memory access and implementation overhead. RF averaged 797.47 comparisons over the 100 endpoints, ranging from 762 to 800. Equivalent HGB paths were not measured. The output-arithmetic counts exclude checks, branches, casts, indexing and memory access.
+Inference visits one path per tree. Both ensembles have an 800-comparison upper bound; RF actually averaged 797.47 comparisons (range 762-800). HGB paths were not measured. Output arithmetic excludes checks, branches, casts, indexing and memory access. The runtime implications are discussed below.
 
 $$
 N_{\mathrm{FLOP}}=d+d=2d,\qquad V_{\mathrm{bytes}}=8(d+d+1+1)=8(2d+2)
@@ -297,13 +297,19 @@ Table 10. Simplified float64 single-record estimates without cache reuse. These 
 
 ### Numerical stability and failure handling
 
-The least-squares implementation avoids explicitly inverting the normal equations. However, the unscaled temperature, pressure and speed features differ in magnitude and may be correlated, affecting coefficient sensitivity. A condition-number or perturbation analysis was not performed. Trees avoid the need for feature scaling, but sensor noise near a split threshold can change the selected branch. Nonnegative clipping constrains the output range without enforcing the engine's physical relationships.
+Least squares avoids a normal-equation inverse, but differently scaled, correlated inputs can still affect coefficient sensitivity; condition numbers and noise perturbations were not measured. Tree thresholds are also sensitive to nearby sensor noise. Clipping enforces nonnegative RUL without imposing physical relationships.
 
-The asymmetric score is evaluated with expm1 to calculate exp(z)-1 accurately near zero. np.errstate raises an exception for overflow or invalid arithmetic, and the extreme-score test checks that an unrepresentable exponential is reported. RF training ends when its finite tree-growth rules are satisfied. HGB stops after 200 iterations with early stopping disabled. Neither method uses a differential-equation solver or an iterative residual tolerance.
+The score uses expm1 for accurate exp(z)-1 near zero; np.errstate and the extreme-score test report overflow explicitly. RF stops under its finite tree-growth rules; HGB uses 200 iterations with early stopping disabled. Neither uses a differential-equation solver or an iterative residual tolerance.
 
 ### Scaling and model choice
 
-Linear prediction cost grows with the number of features. Tree prediction depends on the number of trees and the depth of the paths visited. Larger datasets and models also increase training and memory requirements, although only one dataset size was benchmarked here. Histogram binning reduces split-search work at the cost of approximation. RF was retained for its RMSE and asymmetric-score results; HGB offers a substantial reduction in computation and storage with similar prediction error.
+Training and inference scale differently. For a tall matrix with n records and d features, dense least-squares fitting grows roughly linearly with n and quadratically with d; prediction and coefficient storage grow linearly with d. Adding sensors therefore affects fitting more strongly. The seven-feature model's 14 prediction FLOPs are small compared with library overhead, explaining its similar call time to age-only regression.
+
+With B trees and maximum depth h, inference uses at most B times h comparisons per record. At fixed depth, prediction need not grow directly with training-set size; fitting must still process more records and candidate features. Storage follows fitted node count. RF trees can train independently, whereas boosting is sequential. Parallel speed-up and scaling across dataset sizes were not measured.
+
+The equal 800-comparison bounds therefore conceal different memory structures and split-search costs. HGB has 5,374 nodes against RF's 44,144. Histogram binning reduces candidate split work, and the recorded HGB fit was 18.1 times faster; single-endpoint prediction was 3.88 times faster and serialized storage 89.47% smaller. These advantages justify considering HGB when retraining is frequent or storage and response time are constrained. For fleet processing, the 100-engine batch times are more relevant than extrapolating isolated-call latency.
+
+RF was selected for its RMSE (25.82 versus 26.18 cycles) and asymmetric score (5804.70 versus 7212.36), particularly for large optimistic errors. Both paired RF/HGB error intervals include zero, so the choice also depends on resource constraints. HGB has lower MAE and cost. Multi-sensor linear regression prioritizes interpretability and minimal resources, accepting 31.83-cycle RMSE. Deployment should benchmark the intended fleet size and update rate before fixing that trade-off.
 
 
 <!-- Page break -->

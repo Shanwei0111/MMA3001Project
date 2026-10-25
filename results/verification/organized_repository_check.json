@@ -1,14 +1,14 @@
 {
   "date_local": "2026-10-25",
-  "tested_source_commit": "f5240419ce88124dfd35a6f205d0ea206fde67ce",
-  "verification_type": "organized working-tree check",
+  "tested_source_commit": "4886c8e566775878d71534e86ad86f558fe5c0be",
+  "verification_type": "independent clean Git clone and isolated environment",
   "python": "3.14.5",
   "platform": "Windows-11-10.0.26300-SP0",
   "pytest": {
     "tests": 61,
     "failures": 0,
     "errors": 0,
-    "seconds": 31.107
+    "seconds": 14.206
   },
   "reproduction": {
     "status": "passed",
@@ -79,22 +79,22 @@
   "tested_sources_sha256": {
     "src/rul_project/__init__.py": "3fafb7805538ce91e31e978a2c814c056ba51715e0a39509b4a26f83256d5de5",
     "src/rul_project/__main__.py": "7a659f8a450a3428910309b9771fcd2d8935a5d8924c9916025c55e00c8d29b4",
-    "src/rul_project/analyse_uncertainty.py": "da4bb13aae0e0c3123f13c4d2f0e2b75e00b0765b740e6d14e88636730577c6d",
-    "src/rul_project/benchmark_performance.py": "8463c39ff45c6cf0f3c8363c123c0cc99f39ad2e52537b4b4d0d7fe581163d60",
+    "src/rul_project/analyse_uncertainty.py": "e66a1c684a25d2a1dcdaf831f9fbce734e638e3255fef3132ee98b254b240ecb",
+    "src/rul_project/benchmark_performance.py": "4ab1ecde695e56bd1477fd158af558b6c9fff0eca2ffda17aae97687b1b6e1a7",
     "src/rul_project/data_access.py": "e8532dd920954dfcbb6704e8d679cdbc6932c77338315bf1069aad3b4d05cd9e",
-    "src/rul_project/evaluate_test_set.py": "069030308394d38caac003dfde1db5bda97cc7c0e1abe76d50f6402907c5ddf8",
+    "src/rul_project/evaluate_test_set.py": "d6c04e18e6a8b7f150c38a1d59930ab85a7e3a6532636ebe444803e1f5cdbe9f",
     "src/rul_project/model_configuration.py": "d210db21cd4762fc7f6301dd47d94bf5e3a462ecfc8aa40d88f333ede3a1dbfc",
-    "src/rul_project/plot_model_results.py": "f76de38e9834d18b5dd36f7505fd2e4a25065290a58bf3444421573f8e4b3912",
-    "src/rul_project/prepare_dataset.py": "211d6473a3d2bc04f3e56b96248850f8f90f54b4c20c6713b9f94bed6d3c1263",
+    "src/rul_project/plot_model_results.py": "ccf415a86b5fec4494f34b0b2906f35577d12689110f9a0ba22bc0cca109a3f5",
+    "src/rul_project/prepare_dataset.py": "34fc9375457f9d6e4ddbe8984fdb7166be2586f7bdbfb337aadaffd263970289",
     "src/rul_project/rul_metrics.py": "27bc73ea32b5e220c19019b10a40da4b851bf1af83e760ba38069d15ea2fe601",
     "src/rul_project/run_project.py": "59a4a3ebc9ed3aabdb41aaf13832163a12704d81fd7605ca79eeccb71932369b",
-    "src/rul_project/train_models.py": "cf8e2f31906fb5c8699c4b68be4bcbeef5df475687656cebaa949078f2d4f850",
-    "tools/build_api_documentation.py": "0e53e704d801a2d861f8963e5f6bd21db27bc7d7ce757ff655682bf0e0f8fd6c",
+    "src/rul_project/train_models.py": "d445525d90e3c87909eb4da21364e286f78a1a49aba0f4b5649973399254ea5d",
+    "tools/build_api_documentation.py": "13cad5424d42c95b6983e92a4f2864c7340a15fe640fe725cd10a31a75834f9b",
     "tools/create_submission_zip.py": "b7e5f4484a5a56ec602adcd35f0a9511cf654c13877a31fbe916893ecd9e4a77",
     "tools/verify_reproducibility.py": "352cfa2df7de0b3e61848a383b5e6cf5b7994ccccab6a9685b60ff9f5fcfc10a",
-    "tests/test_data_and_metrics.py": "66f9bda1358c6cb5d2e4c26775ff21f583df52cfb9d33b15383589aac30804fb",
-    "tests/test_repository_contracts.py": "84af8b21ee112b3e63b6600f30ee0bed33f6338aa3224795a3d0c18b4a40b424",
-    "tests/test_workflow_functions.py": "0be69a5a9d1b8978b099155dde0e79ea25e152bf39200315d96dab46c960ff0b"
+    "tests/test_data_and_metrics.py": "3cea4c01a3f7e0e780d5caef895c931e0f55e721fcfdc46b1a96d89a31e6618c",
+    "tests/test_repository_contracts.py": "05b74fb98e555458e1da7d584879906b7314072aa04afebbd917e2229a3b05d2",
+    "tests/test_workflow_functions.py": "09fe35bb733e5a1e0a5fa9fb2d8d7de8817a4deb41eff2ffb7df746c60383194"
   },
   "scope": "Full preparation, split, four models, forest-depth study, both grouped CVs, official test, paired uncertainty, figures and profiling",
   "dependencies": {

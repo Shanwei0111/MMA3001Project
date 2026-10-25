@@ -33,15 +33,18 @@ report explains test reuse, positive bias and the uncertainty limitations.
 The recorded experiment uses **CPython 3.14.5**, NumPy 2.5.4, pandas 3.1.0,
 SciPy 1.18.1, scikit-learn 1.9.1, Matplotlib 3.11.2 and threadpoolctl 3.7.0.
 Python 3.14 is required by this pinned environment. README commands run from
-the repository root. Use an empty output directory for an independent rerun.
+the repository root. `requirements-lock.txt` pins all 30 verified packages,
+including transitive dependencies and the build backend. `requirements.txt`
+lists the main runtime/test/documentation dependencies. Use a separate output
+directory for an independent rerun.
 
 ```powershell
 git clone https://github.com/Shanwei0111/MMA3001Project.git
 cd MMA3001Project
 python --version
 python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r requirements.txt
-.venv\Scripts\python.exe -m pip install --no-deps -e .
+.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.venv\Scripts\python.exe -m pip install --no-build-isolation --no-deps -e .
 ```
 
 In the commands below, `python` means this virtual environment's interpreter;
@@ -84,6 +87,14 @@ computation thread, with random seed 42. Predictions/metrics should reproduce
 within the verification tolerance; timings and platform-dependent storage
 inspection may change. No feature scaling, smoothing, windows, RUL cap or
 engine weighting is introduced during packaging.
+
+A clean Git clone in a new environment without inherited packages passed all
+44 tests and the executable API examples. The full workflow reproduced all 400
+official predictions, both grouped CV tables and the paired bootstrap tables
+with a maximum absolute difference of **0.0**. See
+[verification details](docs/VERIFICATION.md), the
+[readable test report](evidence/verification/pytest_report.html) and
+[machine-readable evidence](evidence/verification/clean_clone_verification.json).
 
 `outputs/` contains rerun results and is ignored by Git. `evidence/reported/`
 is the frozen evidence behind the written report. Never replace old benchmark

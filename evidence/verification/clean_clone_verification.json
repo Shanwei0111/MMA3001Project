@@ -1,0 +1,114 @@
+{
+  "date_local": "2026-10-25",
+  "tested_source_commit": "b9c30c6b8fe93b0826ea5394c52b805141865018",
+  "clone_method": "git clone --no-local from the committed submission branch",
+  "environment": {
+    "python": "3.14.5",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "system_site_packages": false,
+    "packages": {
+      "Jinja2": "3.1.6",
+      "MarkupSafe": "3.0.4",
+      "Pygments": "2.21.0",
+      "cloudpickle": "3.1.2",
+      "colorama": "0.4.6",
+      "contourpy": "1.4.0",
+      "cycler": "0.12.1",
+      "fonttools": "4.67.0",
+      "iniconfig": "2.3.1",
+      "joblib": "1.6.0",
+      "kiwisolver": "1.5.1",
+      "markdown2": "2.5.5",
+      "matplotlib": "3.11.2",
+      "narwhals": "2.27.1",
+      "numpy": "2.5.4",
+      "packaging": "26.3",
+      "pandas": "3.1.0",
+      "pdoc": "16.0.0",
+      "pillow": "13.0.0",
+      "pluggy": "1.7.0",
+      "pyparsing": "3.3.3",
+      "pytest": "9.1.1",
+      "python-dateutil": "3.0.0",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "setuptools": "84.2.1",
+      "six": "1.17.0",
+      "threadpoolctl": "3.7.0",
+      "tzdata": "2026.5",
+      "wheel": "0.48.0"
+    }
+  },
+  "data": "Original FD001 files copied through the validated acquisition command; SHA-256 checks passed",
+  "pytest": {
+    "tests": 44,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 50.176
+  },
+  "verification": {
+    "status": "passed",
+    "checks": [
+      {
+        "file": "official_test_predictions.csv",
+        "rows": 400,
+        "max_absolute_difference": 0.0
+      },
+      {
+        "file": "official_test_extended_metrics.csv",
+        "rows": 4,
+        "max_absolute_difference": 0.0
+      },
+      {
+        "file": "random_forest_group_cv.csv",
+        "rows": 5,
+        "max_absolute_difference": 0.0
+      },
+      {
+        "file": "hist_gradient_boosting_group_cv.csv",
+        "rows": 5,
+        "max_absolute_difference": 0.0
+      },
+      {
+        "file": "bootstrap_summary.csv",
+        "rows": 4,
+        "max_absolute_difference": 0.0
+      },
+      {
+        "file": "extended_bootstrap_summary.csv",
+        "rows": 5,
+        "max_absolute_difference": 0.0
+      }
+    ],
+    "maximum_absolute_difference": 0.0,
+    "tolerance": {
+      "rtol": 1e-10,
+      "atol": 1e-08
+    },
+    "excluded": [
+      "timings",
+      "profiles",
+      "serialized size",
+      "selected private arrays"
+    ]
+  },
+  "tested_package_sources_sha256": {
+    "src/rul_project/__init__.py": "55f03bc8f3681c8e8235eb91607e1fc0ee2e15046e288c2e851bfede1cc3a806",
+    "src/rul_project/__main__.py": "106bb459eec4402c6ac5293dea522346170dcd419a0af133cad7486193a9c9dc",
+    "src/rul_project/cli.py": "5e8dd211ad40557f86683ea9095cd7f1395f88f4ad897dfac70d0773c161e120",
+    "src/rul_project/data_access.py": "3a97643998c1054e8c5f618a421f8189c30d2b890a341fbd6bf621f9faea1b9e",
+    "src/rul_project/rul_utils.py": "d93baa485730c86cca3ba25f3591a43d8aaca25cfa85ffd39a553cbee54ea818",
+    "src/rul_project/settings.py": "3079eb88ee85a070c8e305a12a59c533da4a081e011401a705bdb248a525e02c",
+    "src/rul_project/steps/__init__.py": "8b42e267e1108c710b637557504d2a864f72c1597713e4067f7650f6336eef5e",
+    "src/rul_project/steps/histgradientboosting.py": "439dcc525ce5f7486bf47abfb766ee40c2647d89139dd93399b4fb1e5a9f6b0d",
+    "src/rul_project/steps/linear_models.py": "0d98e4126afbc4541fbf6558758d92e9a4c24f436aa7302b224e58d994f9af3f",
+    "src/rul_project/steps/performance.py": "7569c2c415e47378ee1f7439ab5920de03f848ded2a31f1c7410a0e69184a27f",
+    "src/rul_project/steps/plotbaseline.py": "e485f835435452bb11503403e53372087819ef03923de3758af4932875f4caae",
+    "src/rul_project/steps/preparedata.py": "49d16a25a4caca2f001221beafef7573d38520cfe38ed3d4a76e01ad17b357f4",
+    "src/rul_project/steps/randomforest.py": "50c46cb311697d557a793074da23d777c4fb27e72d20f356976d4824fc71c062",
+    "src/rul_project/steps/splitdata.py": "b7b3a931562692cf618e3e08da6b7616ad96f76c24f13ffd11ddd4343f5ff557",
+    "src/rul_project/steps/testevaluation.py": "98679383c41e9e104b1b2c641f9f997da16b00e6953493cfae919cd93b091bc6",
+    "src/rul_project/steps/uncertainty.py": "5d93bf138c7e972839ad1f27746f7be3ff16929e2950b4904c0bbbd8e5b35c31"
+  },
+  "scope": "Full data preparation, 80/20 split, baseline fitting, RF depth study, both grouped CVs, official refitting, plots, profiling and paired bootstrap"
+}

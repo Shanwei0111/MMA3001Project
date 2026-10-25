@@ -1,26 +1,26 @@
 """Refit four fixed models and score the 100 official test endpoints.
 
-    Reads the prepared/source files specified in the README under configured
-    DATA_DIR/OUTPUT_DIR and writes official metrics, predictions, error analysis and paired bootstrap. Importing this module performs
-    no experiment. CLI usage: ``python -m rul_project testevaluation``.
-    """
+Reads the prepared/source files specified in the README under configured
+DATA_DIR/OUTPUT_DIR and writes official metrics, predictions, error analysis and paired bootstrap. Importing this module performs
+no experiment. CLI usage: ``python -m rul_project testevaluation``.
+"""
 from rul_project.settings import DATA_DIR, OUTPUT_DIR
 
 
 def main() -> None:
     """Refit four fixed models and score the 100 official test endpoints.
 
-        Returns:
-            None: Writes official metrics, predictions, error analysis and paired bootstrap to OUTPUT_DIR and prints summaries.
+    Returns:
+        None: Writes official metrics, predictions, error analysis and paired bootstrap to OUTPUT_DIR and prints summaries.
 
-        Raises:
-            FileNotFoundError: If a required source or preceding-stage CSV is absent.
-            ValueError: If parsing, schema, alignment or estimator validation fails.
-            OSError: If input/output access is unavailable.
+    Raises:
+        FileNotFoundError: If a required source or preceding-stage CSV is absent.
+        ValueError: If parsing, schema, alignment or estimator validation fails.
+        OSError: If input/output access is unavailable.
 
-        No arguments are accepted. Configure paths through the CLI before import.
-        Model settings and output names are preserved from the student's script.
-        """
+    No arguments are accepted. Configure paths through the CLI before import.
+    Model settings and output names are preserved from the student's script.
+    """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     from pathlib import Path
     from sklearn.ensemble import RandomForestRegressor

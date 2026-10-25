@@ -6,26 +6,26 @@ import pandas as pd
 
 def add_training_rul(data: pd.DataFrame) -> pd.DataFrame:
     """Return uncapped cycle-to-failure labels for complete training histories.
-    
-        Args:
-            data (pandas.DataFrame): Nonempty table containing engine_id and cycle.
-                Keys must be finite positive integers, unique as engine-cycle pairs.
-                Other columns can contain arbitrary measurements and are preserved.
-    
-        Returns:
-            pandas.DataFrame: Copy of data with RUL = max(cycle per engine) - cycle,
-            in cycles. Original row order and index are retained; data is unchanged.
-    
-        Raises:
-            ValueError: If keys/columns are missing, corrupt, invalid or duplicated.
-    
-        Examples:
-            >>> import pandas as pd
-            >>> add_training_rul(pd.DataFrame({"engine_id": [1, 1], "cycle": [1, 3]}))["RUL"].tolist()
-            [2, 0]
-    
-        The final observed cycle is assumed to represent failure. Censored histories
-        are semantically unsupported even when their numeric keys pass validation.
+
+    Args:
+        data (pandas.DataFrame): Nonempty table containing engine_id and cycle.
+            Keys must be finite positive integers, unique as engine-cycle pairs.
+            Other columns can contain arbitrary measurements and are preserved.
+
+    Returns:
+        pandas.DataFrame: Copy of data with RUL = max(cycle per engine) - cycle,
+        in cycles. Original row order and index are retained; data is unchanged.
+
+    Raises:
+        ValueError: If keys/columns are missing, corrupt, invalid or duplicated.
+
+    Examples:
+        >>> import pandas as pd
+        >>> add_training_rul(pd.DataFrame({"engine_id": [1, 1], "cycle": [1, 3]}))["RUL"].tolist()
+        [2, 0]
+
+    The final observed cycle is assumed to represent failure. Censored histories
+    are semantically unsupported even when their numeric keys pass validation.
     """
     required_columns = ["engine_id", "cycle"]
 
@@ -85,26 +85,26 @@ def split_by_engine(
     random_state: int = 42,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Keep complete engine histories together in a deterministic split.
-    
-        Args:
-            data (pandas.DataFrame): Prepared table with a nonmissing engine_id.
-                Upstream label construction is responsible for validating key values.
-            n_train (int): Number of training engines; defaults to 80. Must leave at
-                least one engine in each subset. Booleans are rejected.
-            random_state (int): Seed passed to pandas sampling; defaults to 42.
-    
-        Returns:
-            tuple[pandas.DataFrame, pandas.DataFrame]: Independent training and
-            validation copies, preserving row order within each subset.
-    
-        Raises:
-            ValueError: If engine_id is absent/missing or n_train is invalid.
-    
-        Examples:
-            >>> data = pd.DataFrame({"engine_id": [1, 2, 3]})
-            >>> train, valid = split_by_engine(data, n_train=2)
-            >>> set(train.engine_id).isdisjoint(valid.engine_id)
-            True
+
+    Args:
+        data (pandas.DataFrame): Prepared table with a nonmissing engine_id.
+            Upstream label construction is responsible for validating key values.
+        n_train (int): Number of training engines; defaults to 80. Must leave at
+            least one engine in each subset. Booleans are rejected.
+        random_state (int): Seed passed to pandas sampling; defaults to 42.
+
+    Returns:
+        tuple[pandas.DataFrame, pandas.DataFrame]: Independent training and
+        validation copies, preserving row order within each subset.
+
+    Raises:
+        ValueError: If engine_id is absent/missing or n_train is invalid.
+
+    Examples:
+        >>> data = pd.DataFrame({"engine_id": [1, 2, 3]})
+        >>> train, valid = split_by_engine(data, n_train=2)
+        >>> set(train.engine_id).isdisjoint(valid.engine_id)
+        True
     """
     if "engine_id" not in data.columns:
         raise ValueError("Missing required column: engine_id.")
@@ -138,27 +138,27 @@ def split_by_engine(
 
 def evaluate_rul(y_true, y_pred) -> dict[str, float]:
     """Evaluate aligned RUL observations using unrounded supplied predictions.
-    
-        Args:
-            y_true (array-like): Finite nonnegative one-dimensional actual RUL,
-                measured in cycles. At least one observation is required.
-            y_pred (array-like): Finite one-dimensional predictions in cycles, in
-                the same order and with the same length as y_true. Raw negative
-                predictions are allowed; this function never clips its inputs.
-    
-        Returns:
-            dict[str, float]: mae, rmse and bias in cycles; overprediction_pct as a
-            percentage; nasa_score as the sum of dimensionless asymmetric penalties.
-            Error is prediction minus truth; under/overprediction divisors are 13/10.
-    
-        Raises:
-            ValueError: If arrays are empty, nonfinite, not aligned one-dimensional
-                arrays or actual RUL contains a negative value.
-            FloatingPointError: If squared errors or exponential penalties overflow.
-    
-        Examples:
-            >>> evaluate_rul([10, 20], [10, 20])["rmse"]
-            0.0
+
+    Args:
+        y_true (array-like): Finite nonnegative one-dimensional actual RUL,
+            measured in cycles. At least one observation is required.
+        y_pred (array-like): Finite one-dimensional predictions in cycles, in
+            the same order and with the same length as y_true. Raw negative
+            predictions are allowed; this function never clips its inputs.
+
+    Returns:
+        dict[str, float]: mae, rmse and bias in cycles; overprediction_pct as a
+        percentage; nasa_score as the sum of dimensionless asymmetric penalties.
+        Error is prediction minus truth; under/overprediction divisors are 13/10.
+
+    Raises:
+        ValueError: If arrays are empty, nonfinite, not aligned one-dimensional
+            arrays or actual RUL contains a negative value.
+        FloatingPointError: If squared errors or exponential penalties overflow.
+
+    Examples:
+        >>> evaluate_rul([10, 20], [10, 20])["rmse"]
+        0.0
     """
     actual = np.asarray(y_true, dtype=float)
     predicted = np.asarray(y_pred, dtype=float)
@@ -202,19 +202,19 @@ def evaluate_rul(y_true, y_pred) -> dict[str, float]:
 
 def make_hist_gradient_boosting():
     """Create an unfitted HGB candidate with the fixed project configuration.
-    
-        Returns:
-            sklearn.ensemble.HistGradientBoostingRegressor: Squared-error model with
-            learning_rate=0.05, max_iter=200, max_leaf_nodes=15, max_depth=4,
-            min_samples_leaf=20, l2_regularization=1.0, max_bins=255 (library default),
-            early_stopping=False and random_state=42.
-    
-        Examples:
-            >>> make_hist_gradient_boosting().max_iter
-            200
-    
-        No arguments are accepted. Early stopping is disabled so grouped validation
-        controls evaluation instead of an automatic random row-level holdout.
+
+    Returns:
+        sklearn.ensemble.HistGradientBoostingRegressor: Squared-error model with
+        learning_rate=0.05, max_iter=200, max_leaf_nodes=15, max_depth=4,
+        min_samples_leaf=20, l2_regularization=1.0, max_bins=255 (library default),
+        early_stopping=False and random_state=42.
+
+    Examples:
+        >>> make_hist_gradient_boosting().max_iter
+        200
+
+    No arguments are accepted. Early stopping is disabled so grouped validation
+    controls evaluation instead of an automatic random row-level holdout.
     """
     from sklearn.ensemble import HistGradientBoostingRegressor
 

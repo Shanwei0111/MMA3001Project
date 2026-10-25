@@ -1,26 +1,26 @@
 """Prepare uncapped training labels from train_FD001.txt.
 
-    Reads the prepared/source files specified in the README under configured
-    DATA_DIR/OUTPUT_DIR and writes train_FD001_labeled.csv. Importing this module performs
-    no experiment. CLI usage: ``python -m rul_project preparedata``.
-    """
+Reads the prepared/source files specified in the README under configured
+DATA_DIR/OUTPUT_DIR and writes train_FD001_labeled.csv. Importing this module performs
+no experiment. CLI usage: ``python -m rul_project preparedata``.
+"""
 from rul_project.settings import DATA_DIR, OUTPUT_DIR
 
 
 def main() -> None:
     """Prepare uncapped training labels from train_FD001.txt.
 
-        Returns:
-            None: Writes train_FD001_labeled.csv to OUTPUT_DIR and prints summaries.
+    Returns:
+        None: Writes train_FD001_labeled.csv to OUTPUT_DIR and prints summaries.
 
-        Raises:
-            FileNotFoundError: If a required source or preceding-stage CSV is absent.
-            ValueError: If parsing, schema, alignment or estimator validation fails.
-            OSError: If input/output access is unavailable.
+    Raises:
+        FileNotFoundError: If a required source or preceding-stage CSV is absent.
+        ValueError: If parsing, schema, alignment or estimator validation fails.
+        OSError: If input/output access is unavailable.
 
-        No arguments are accepted. Configure paths through the CLI before import.
-        Model settings and output names are preserved from the student's script.
-        """
+    No arguments are accepted. Configure paths through the CLI before import.
+    Model settings and output names are preserved from the student's script.
+    """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     from rul_project.rul_utils import add_training_rul
     from pathlib import Path

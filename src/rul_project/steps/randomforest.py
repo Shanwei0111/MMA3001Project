@@ -1,26 +1,26 @@
 """Evaluate the fixed forest, depth sensitivity and five grouped folds.
 
-    Reads the prepared/source files specified in the README under configured
-    DATA_DIR/OUTPUT_DIR and writes random_forest_metrics.csv, predictions, depth study and grouped CV. Importing this module performs
-    no experiment. CLI usage: ``python -m rul_project randomforest``.
-    """
+Reads the prepared/source files specified in the README under configured
+DATA_DIR/OUTPUT_DIR and writes random_forest_metrics.csv, predictions, depth study and grouped CV. Importing this module performs
+no experiment. CLI usage: ``python -m rul_project randomforest``.
+"""
 from rul_project.settings import DATA_DIR, OUTPUT_DIR
 
 
 def main() -> None:
     """Evaluate the fixed forest, depth sensitivity and five grouped folds.
 
-        Returns:
-            None: Writes random_forest_metrics.csv, predictions, depth study and grouped CV to OUTPUT_DIR and prints summaries.
+    Returns:
+        None: Writes random_forest_metrics.csv, predictions, depth study and grouped CV to OUTPUT_DIR and prints summaries.
 
-        Raises:
-            FileNotFoundError: If a required source or preceding-stage CSV is absent.
-            ValueError: If parsing, schema, alignment or estimator validation fails.
-            OSError: If input/output access is unavailable.
+    Raises:
+        FileNotFoundError: If a required source or preceding-stage CSV is absent.
+        ValueError: If parsing, schema, alignment or estimator validation fails.
+        OSError: If input/output access is unavailable.
 
-        No arguments are accepted. Configure paths through the CLI before import.
-        Model settings and output names are preserved from the student's script.
-        """
+    No arguments are accepted. Configure paths through the CLI before import.
+    Model settings and output names are preserved from the student's script.
+    """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     from sklearn.model_selection import GroupKFold
     from time import perf_counter

@@ -29,19 +29,19 @@ PREDICTION_REPETITIONS = 30
 
 def benchmark_prediction(model, inputs):
     """Measure warmed estimator prediction calls without loading files.
-    
-        Args:
-            model: Fitted scikit-learn regressor accepting inputs in predict().
-            inputs (pandas.DataFrame): Nonempty table of features in fitted order.
-    
-        Returns:
-            dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.
-    
-        Raises:
-            ValueError: If predict() rejects inputs or their feature schema.
-    
-        One warm-up call is excluded from timing. Clipping and feature selection
-        belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).
+
+    Args:
+        model: Fitted scikit-learn regressor accepting inputs in predict().
+        inputs (pandas.DataFrame): Nonempty table of features in fitted order.
+
+    Returns:
+        dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.
+
+    Raises:
+        ValueError: If predict() rejects inputs or their feature schema.
+
+    One warm-up call is excluded from timing. Clipping and feature selection
+    belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).
     """
     model.predict(inputs)
     durations = []
@@ -60,17 +60,17 @@ def benchmark_prediction(model, inputs):
 
 def hgb_trees(model):
     """Flatten fitted HGB predictors using version-dependent internals.
-    
-        Args:
-            model (HistGradientBoostingRegressor): A fitted scalar-output estimator.
-    
-        Returns:
-            list: Internal TreePredictor objects in boosting iteration order.
-    
-        Raises:
-            AttributeError: If model is unfitted or its private layout is unsupported.
-    
-        Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.
+
+    Args:
+        model (HistGradientBoostingRegressor): A fitted scalar-output estimator.
+
+    Returns:
+        list: Internal TreePredictor objects in boosting iteration order.
+
+    Raises:
+        AttributeError: If model is unfitted or its private layout is unsupported.
+
+    Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.
     """
     return [
         tree
@@ -81,21 +81,21 @@ def hgb_trees(model):
 
 def numerical_array_bytes(model):
     """Count selected fitted numerical arrays rather than process RAM.
-    
-        Args:
-            model: Fitted LinearRegression, RandomForestRegressor or
-                HistGradientBoostingRegressor. Scalar-output regression is assumed.
-    
-        Returns:
-            int: Coefficient/intercept bytes for linear models, node/value bytes
-            for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.
-            Python objects, temporary workspace and process/peak RAM are excluded.
-    
-        Raises:
-            TypeError: If the estimator type is unsupported.
-            AttributeError: If unfitted or private HGB internals are incompatible.
-    
-        Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.
+
+    Args:
+        model: Fitted LinearRegression, RandomForestRegressor or
+            HistGradientBoostingRegressor. Scalar-output regression is assumed.
+
+    Returns:
+        int: Coefficient/intercept bytes for linear models, node/value bytes
+        for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.
+        Python objects, temporary workspace and process/peak RAM are excluded.
+
+    Raises:
+        TypeError: If the estimator type is unsupported.
+        AttributeError: If unfitted or private HGB internals are incompatible.
+
+    Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.
     """
     if isinstance(model, LinearRegression):
         arrays = [
@@ -130,19 +130,19 @@ def numerical_array_bytes(model):
 
 def save_table(rows, filename, title):
     """Save an unrounded CSV and print a three-decimal summary.
-    
-        Args:
-            rows (list[dict]): Tabular records compatible with pandas.DataFrame.
-            filename (str): CSV filename relative to the configured OUTPUT_DIR.
-            title (str): Heading printed above the displayed summary.
-    
-        Returns:
-            pandas.DataFrame: The unrounded table written to disk.
-    
-        Raises:
-            OSError: If the output cannot be written.
-    
-        Usage: save_table(records, "timing.csv", "Timing results").
+
+    Args:
+        rows (list[dict]): Tabular records compatible with pandas.DataFrame.
+        filename (str): CSV filename relative to the configured OUTPUT_DIR.
+        title (str): Heading printed above the displayed summary.
+
+    Returns:
+        pandas.DataFrame: The unrounded table written to disk.
+
+    Raises:
+        OSError: If the output cannot be written.
+
+    Usage: save_table(records, "timing.csv", "Timing results").
     """
     table = pd.DataFrame(rows)
     table.to_csv(OUTPUT_DIR / filename, index=False)
@@ -155,22 +155,22 @@ def save_table(rows, filename, title):
 
 def save_training_profile(model_name, template, inputs, targets):
     """Profile a separate cloned fit after runtime benchmarking.
-    
-        Args:
-            model_name (str): Human-readable name used to construct output filenames.
-            template: Unfitted scikit-learn-compatible estimator to clone.
-            inputs (pandas.DataFrame): Training feature table in fixed feature order.
-            targets (array-like): Aligned training RUL in cycles.
-    
-        Returns:
-            None: Writes binary .prof and readable top-15 cumulative-time text files.
-    
-        Raises:
-            ValueError: If clone or fit rejects the configuration/data.
-            OSError: If profile files cannot be written.
-    
-        Usage: save_training_profile("RF", template, X_train, y_train).
-        Profiled times include instrumentation overhead; use benchmark timing for comparisons.
+
+    Args:
+        model_name (str): Human-readable name used to construct output filenames.
+        template: Unfitted scikit-learn-compatible estimator to clone.
+        inputs (pandas.DataFrame): Training feature table in fixed feature order.
+        targets (array-like): Aligned training RUL in cycles.
+
+    Returns:
+        None: Writes binary .prof and readable top-15 cumulative-time text files.
+
+    Raises:
+        ValueError: If clone or fit rejects the configuration/data.
+        OSError: If profile files cannot be written.
+
+    Usage: save_training_profile("RF", template, X_train, y_train).
+    Profiled times include instrumentation overhead; use benchmark timing for comparisons.
     """
     profile_model = clone(template)
     profiler = cProfile.Profile()
@@ -193,18 +193,18 @@ def save_training_profile(model_name, template, inputs, targets):
 
 def main():
     """Benchmark the four fixed models on the complete FD001 training set.
-    
-        Returns:
-            None: Writes runtime quartiles, serialized sizes, selected-array memory,
-            linear arithmetic intensity, tree operations, profiles and environment CSV.
-    
-        Raises:
-            FileNotFoundError: If prepared training or endpoint CSVs are missing.
-            ValueError: If inputs are empty, duplicated or invalid for fitting.
-            OSError: If results cannot be written.
-    
-        No arguments are accepted. Run ``python -m rul_project performance`` after
-        testevaluation. Uses three fits and 30 warm prediction calls with one thread.
+
+    Returns:
+        None: Writes runtime quartiles, serialized sizes, selected-array memory,
+        linear arithmetic intensity, tree operations, profiles and environment CSV.
+
+    Raises:
+        FileNotFoundError: If prepared training or endpoint CSVs are missing.
+        ValueError: If inputs are empty, duplicated or invalid for fitting.
+        OSError: If results cannot be written.
+
+    No arguments are accepted. Run ``python -m rul_project performance`` after
+    testevaluation. Uses three fits and 30 warm prediction calls with one thread.
     """
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

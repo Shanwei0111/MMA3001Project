@@ -26,16 +26,6 @@
 
 
 
-            <h2>API Documentation</h2>
-                <ul class="memberlist">
-            <li>
-                    <a class="variable" href="#DATA_DIR">DATA_DIR</a>
-            </li>
-            <li>
-                    <a class="variable" href="#OUTPUT_DIR">OUTPUT_DIR</a>
-            </li>
-    </ul>
-
 
             <footer>MMA3001 | Chua Shanwei 35393343</footer>
 
@@ -71,36 +61,14 @@ No directory is created merely by importing this module.</p>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RUL_DATA_DIR"</span><span class="p">,</span> <span class="s2">"data/raw"</span><span class="p">))</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="n">OUTPUT_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RUL_OUTPUT_DIR"</span><span class="p">,</span> <span class="s2">"outputs"</span><span class="p">))</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="n">__all__</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RUL_DATA_DIR"</span><span class="p">,</span> <span class="s2">"data/raw"</span><span class="p">))</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">OUTPUT_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"RUL_OUTPUT_DIR"</span><span class="p">,</span> <span class="s2">"outputs"</span><span class="p">))</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 </span></pre></div>
 
 
             </section>
-                <section id="DATA_DIR">
-                    <div class="attr variable">
-            <span class="name">DATA_DIR</span>        =
-<span class="default_value">WindowsPath(&#39;C:/Users/User/Downloads/MMA3001 Project/MMA3001Project/data/raw&#39;)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#DATA_DIR"></a>
-    
-    
-
-                </section>
-                <section id="OUTPUT_DIR">
-                    <div class="attr variable">
-            <span class="name">OUTPUT_DIR</span>        =
-<span class="default_value">WindowsPath(&#39;C:/Users/User/Downloads/MMA3001 Project/MMA3001Project/outputs&#39;)</span>
-
-        
-    </div>
-    <a class="headerlink" href="#OUTPUT_DIR"></a>
-    
-    
-
-                </section>
     </main>
 </body>
 </html>

@@ -107,19 +107,19 @@
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a><span class="k">def</span><span class="w"> </span><span class="nf">benchmark_prediction</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
 </span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="w">    </span><span class="sd">"""Measure warmed estimator prediction calls without loading files.</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a><span class="sd">    </span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">        Args:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">            model: Fitted scikit-learn regressor accepting inputs in predict().</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">            inputs (pandas.DataFrame): Nonempty table of features in fitted order.</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a><span class="sd">    </span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">        Returns:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">            dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="sd">    </span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">        Raises:</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">            ValueError: If predict() rejects inputs or their feature schema.</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">    </span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">        One warm-up call is excluded from timing. Clipping and feature selection</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a><span class="sd">    Args:</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a><span class="sd">        model: Fitted scikit-learn regressor accepting inputs in predict().</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="sd">        inputs (pandas.DataFrame): Nonempty table of features in fitted order.</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a><span class="sd">    Returns:</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a><span class="sd">        dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">    Raises:</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a><span class="sd">        ValueError: If predict() rejects inputs or their feature schema.</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">    One warm-up call is excluded from timing. Clipping and feature selection</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">    belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</span>
 </span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="sd">    """</span>
 </span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>    <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 </span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>    <span class="n">durations</span> <span class="o">=</span> <span class="p">[]</span>
@@ -138,17 +138,17 @@
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
 </span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="k">def</span><span class="w"> </span><span class="nf">hgb_trees</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
 </span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a><span class="w">    </span><span class="sd">"""Flatten fitted HGB predictors using version-dependent internals.</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="sd">    </span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Args:</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">            model (HistGradientBoostingRegressor): A fitted scalar-output estimator.</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">    </span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">        Returns:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            list: Internal TreePredictor objects in boosting iteration order.</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">    </span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">        Raises:</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">            AttributeError: If model is unfitted or its private layout is unsupported.</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">    </span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">    Args:</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a><span class="sd">        model (HistGradientBoostingRegressor): A fitted scalar-output estimator.</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a><span class="sd">    Returns:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">        list: Internal TreePredictor objects in boosting iteration order.</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">    Raises:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        AttributeError: If model is unfitted or its private layout is unsupported.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">    Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.</span>
 </span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">    """</span>
 </span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>    <span class="k">return</span> <span class="p">[</span>
 </span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="n">tree</span>
@@ -159,21 +159,21 @@
 </span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>
 </span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="k">def</span><span class="w"> </span><span class="nf">numerical_array_bytes</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
 </span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="w">    </span><span class="sd">"""Count selected fitted numerical arrays rather than process RAM.</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a><span class="sd">    </span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">        Args:</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">            model: Fitted LinearRegression, RandomForestRegressor or</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">                HistGradientBoostingRegressor. Scalar-output regression is assumed.</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">    </span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        Returns:</span>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">            int: Coefficient/intercept bytes for linear models, node/value bytes</span>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">            for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">            Python objects, temporary workspace and process/peak RAM are excluded.</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">    </span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">        Raises:</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">            TypeError: If the estimator type is unsupported.</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">            AttributeError: If unfitted or private HGB internals are incompatible.</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="sd">    </span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">        Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">    Args:</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">        model: Fitted LinearRegression, RandomForestRegressor or</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            HistGradientBoostingRegressor. Scalar-output regression is assumed.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">    Returns:</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        int: Coefficient/intercept bytes for linear models, node/value bytes</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="sd">        for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="sd">        Python objects, temporary workspace and process/peak RAM are excluded.</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    Raises:</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">        TypeError: If the estimator type is unsupported.</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">        AttributeError: If unfitted or private HGB internals are incompatible.</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a><span class="sd">    Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.</span>
 </span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a><span class="sd">    """</span>
 </span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">):</span>
 </span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span>
@@ -208,19 +208,19 @@
 </span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>
 </span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_table</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
 </span><span id="L-132"><a href="#L-132"><span class="linenos">132</span></a><span class="w">    </span><span class="sd">"""Save an unrounded CSV and print a three-decimal summary.</span>
-</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a><span class="sd">    </span>
-</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">        Args:</span>
-</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">            rows (list[dict]): Tabular records compatible with pandas.DataFrame.</span>
-</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">            filename (str): CSV filename relative to the configured OUTPUT_DIR.</span>
-</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">            title (str): Heading printed above the displayed summary.</span>
-</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a><span class="sd">    </span>
-</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">        Returns:</span>
-</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">            pandas.DataFrame: The unrounded table written to disk.</span>
-</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a><span class="sd">    </span>
-</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">        Raises:</span>
-</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">            OSError: If the output cannot be written.</span>
-</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a><span class="sd">    </span>
-</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">        Usage: save_table(records, "timing.csv", "Timing results").</span>
+</span><span id="L-133"><a href="#L-133"><span class="linenos">133</span></a>
+</span><span id="L-134"><a href="#L-134"><span class="linenos">134</span></a><span class="sd">    Args:</span>
+</span><span id="L-135"><a href="#L-135"><span class="linenos">135</span></a><span class="sd">        rows (list[dict]): Tabular records compatible with pandas.DataFrame.</span>
+</span><span id="L-136"><a href="#L-136"><span class="linenos">136</span></a><span class="sd">        filename (str): CSV filename relative to the configured OUTPUT_DIR.</span>
+</span><span id="L-137"><a href="#L-137"><span class="linenos">137</span></a><span class="sd">        title (str): Heading printed above the displayed summary.</span>
+</span><span id="L-138"><a href="#L-138"><span class="linenos">138</span></a>
+</span><span id="L-139"><a href="#L-139"><span class="linenos">139</span></a><span class="sd">    Returns:</span>
+</span><span id="L-140"><a href="#L-140"><span class="linenos">140</span></a><span class="sd">        pandas.DataFrame: The unrounded table written to disk.</span>
+</span><span id="L-141"><a href="#L-141"><span class="linenos">141</span></a>
+</span><span id="L-142"><a href="#L-142"><span class="linenos">142</span></a><span class="sd">    Raises:</span>
+</span><span id="L-143"><a href="#L-143"><span class="linenos">143</span></a><span class="sd">        OSError: If the output cannot be written.</span>
+</span><span id="L-144"><a href="#L-144"><span class="linenos">144</span></a>
+</span><span id="L-145"><a href="#L-145"><span class="linenos">145</span></a><span class="sd">    Usage: save_table(records, "timing.csv", "Timing results").</span>
 </span><span id="L-146"><a href="#L-146"><span class="linenos">146</span></a><span class="sd">    """</span>
 </span><span id="L-147"><a href="#L-147"><span class="linenos">147</span></a>    <span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
 </span><span id="L-148"><a href="#L-148"><span class="linenos">148</span></a>    <span class="n">table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">OUTPUT_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -233,22 +233,22 @@
 </span><span id="L-155"><a href="#L-155"><span class="linenos">155</span></a>
 </span><span id="L-156"><a href="#L-156"><span class="linenos">156</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_training_profile</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 </span><span id="L-157"><a href="#L-157"><span class="linenos">157</span></a><span class="w">    </span><span class="sd">"""Profile a separate cloned fit after runtime benchmarking.</span>
-</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a><span class="sd">    </span>
-</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">        Args:</span>
-</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">            model_name (str): Human-readable name used to construct output filenames.</span>
-</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">            template: Unfitted scikit-learn-compatible estimator to clone.</span>
-</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">            inputs (pandas.DataFrame): Training feature table in fixed feature order.</span>
-</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">            targets (array-like): Aligned training RUL in cycles.</span>
-</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a><span class="sd">    </span>
-</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">        Returns:</span>
-</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">            None: Writes binary .prof and readable top-15 cumulative-time text files.</span>
-</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a><span class="sd">    </span>
-</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">        Raises:</span>
-</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">            ValueError: If clone or fit rejects the configuration/data.</span>
-</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">            OSError: If profile files cannot be written.</span>
-</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a><span class="sd">    </span>
-</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">        Usage: save_training_profile("RF", template, X_train, y_train).</span>
-</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">        Profiled times include instrumentation overhead; use benchmark timing for comparisons.</span>
+</span><span id="L-158"><a href="#L-158"><span class="linenos">158</span></a>
+</span><span id="L-159"><a href="#L-159"><span class="linenos">159</span></a><span class="sd">    Args:</span>
+</span><span id="L-160"><a href="#L-160"><span class="linenos">160</span></a><span class="sd">        model_name (str): Human-readable name used to construct output filenames.</span>
+</span><span id="L-161"><a href="#L-161"><span class="linenos">161</span></a><span class="sd">        template: Unfitted scikit-learn-compatible estimator to clone.</span>
+</span><span id="L-162"><a href="#L-162"><span class="linenos">162</span></a><span class="sd">        inputs (pandas.DataFrame): Training feature table in fixed feature order.</span>
+</span><span id="L-163"><a href="#L-163"><span class="linenos">163</span></a><span class="sd">        targets (array-like): Aligned training RUL in cycles.</span>
+</span><span id="L-164"><a href="#L-164"><span class="linenos">164</span></a>
+</span><span id="L-165"><a href="#L-165"><span class="linenos">165</span></a><span class="sd">    Returns:</span>
+</span><span id="L-166"><a href="#L-166"><span class="linenos">166</span></a><span class="sd">        None: Writes binary .prof and readable top-15 cumulative-time text files.</span>
+</span><span id="L-167"><a href="#L-167"><span class="linenos">167</span></a>
+</span><span id="L-168"><a href="#L-168"><span class="linenos">168</span></a><span class="sd">    Raises:</span>
+</span><span id="L-169"><a href="#L-169"><span class="linenos">169</span></a><span class="sd">        ValueError: If clone or fit rejects the configuration/data.</span>
+</span><span id="L-170"><a href="#L-170"><span class="linenos">170</span></a><span class="sd">        OSError: If profile files cannot be written.</span>
+</span><span id="L-171"><a href="#L-171"><span class="linenos">171</span></a>
+</span><span id="L-172"><a href="#L-172"><span class="linenos">172</span></a><span class="sd">    Usage: save_training_profile("RF", template, X_train, y_train).</span>
+</span><span id="L-173"><a href="#L-173"><span class="linenos">173</span></a><span class="sd">    Profiled times include instrumentation overhead; use benchmark timing for comparisons.</span>
 </span><span id="L-174"><a href="#L-174"><span class="linenos">174</span></a><span class="sd">    """</span>
 </span><span id="L-175"><a href="#L-175"><span class="linenos">175</span></a>    <span class="n">profile_model</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 </span><span id="L-176"><a href="#L-176"><span class="linenos">176</span></a>    <span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
@@ -271,18 +271,18 @@
 </span><span id="L-193"><a href="#L-193"><span class="linenos">193</span></a>
 </span><span id="L-194"><a href="#L-194"><span class="linenos">194</span></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
 </span><span id="L-195"><a href="#L-195"><span class="linenos">195</span></a><span class="w">    </span><span class="sd">"""Benchmark the four fixed models on the complete FD001 training set.</span>
-</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a><span class="sd">    </span>
-</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">        Returns:</span>
-</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">            None: Writes runtime quartiles, serialized sizes, selected-array memory,</span>
-</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">            linear arithmetic intensity, tree operations, profiles and environment CSV.</span>
-</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a><span class="sd">    </span>
-</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">        Raises:</span>
-</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">            FileNotFoundError: If prepared training or endpoint CSVs are missing.</span>
-</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">            ValueError: If inputs are empty, duplicated or invalid for fitting.</span>
-</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">            OSError: If results cannot be written.</span>
-</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a><span class="sd">    </span>
-</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">        No arguments are accepted. Run ``python -m rul_project performance`` after</span>
-</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">        testevaluation. Uses three fits and 30 warm prediction calls with one thread.</span>
+</span><span id="L-196"><a href="#L-196"><span class="linenos">196</span></a>
+</span><span id="L-197"><a href="#L-197"><span class="linenos">197</span></a><span class="sd">    Returns:</span>
+</span><span id="L-198"><a href="#L-198"><span class="linenos">198</span></a><span class="sd">        None: Writes runtime quartiles, serialized sizes, selected-array memory,</span>
+</span><span id="L-199"><a href="#L-199"><span class="linenos">199</span></a><span class="sd">        linear arithmetic intensity, tree operations, profiles and environment CSV.</span>
+</span><span id="L-200"><a href="#L-200"><span class="linenos">200</span></a>
+</span><span id="L-201"><a href="#L-201"><span class="linenos">201</span></a><span class="sd">    Raises:</span>
+</span><span id="L-202"><a href="#L-202"><span class="linenos">202</span></a><span class="sd">        FileNotFoundError: If prepared training or endpoint CSVs are missing.</span>
+</span><span id="L-203"><a href="#L-203"><span class="linenos">203</span></a><span class="sd">        ValueError: If inputs are empty, duplicated or invalid for fitting.</span>
+</span><span id="L-204"><a href="#L-204"><span class="linenos">204</span></a><span class="sd">        OSError: If results cannot be written.</span>
+</span><span id="L-205"><a href="#L-205"><span class="linenos">205</span></a>
+</span><span id="L-206"><a href="#L-206"><span class="linenos">206</span></a><span class="sd">    No arguments are accepted. Run ``python -m rul_project performance`` after</span>
+</span><span id="L-207"><a href="#L-207"><span class="linenos">207</span></a><span class="sd">    testevaluation. Uses three fits and 30 warm prediction calls with one thread.</span>
 </span><span id="L-208"><a href="#L-208"><span class="linenos">208</span></a><span class="sd">    """</span>
 </span><span id="L-209"><a href="#L-209"><span class="linenos">209</span></a>    <span class="n">OUTPUT_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="L-210"><a href="#L-210"><span class="linenos">210</span></a>
@@ -614,19 +614,19 @@
     <a class="headerlink" href="#benchmark_prediction"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="benchmark_prediction-31"><a href="#benchmark_prediction-31"><span class="linenos">31</span></a><span class="k">def</span><span class="w"> </span><span class="nf">benchmark_prediction</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
 </span><span id="benchmark_prediction-32"><a href="#benchmark_prediction-32"><span class="linenos">32</span></a><span class="w">    </span><span class="sd">"""Measure warmed estimator prediction calls without loading files.</span>
-</span><span id="benchmark_prediction-33"><a href="#benchmark_prediction-33"><span class="linenos">33</span></a><span class="sd">    </span>
-</span><span id="benchmark_prediction-34"><a href="#benchmark_prediction-34"><span class="linenos">34</span></a><span class="sd">        Args:</span>
-</span><span id="benchmark_prediction-35"><a href="#benchmark_prediction-35"><span class="linenos">35</span></a><span class="sd">            model: Fitted scikit-learn regressor accepting inputs in predict().</span>
-</span><span id="benchmark_prediction-36"><a href="#benchmark_prediction-36"><span class="linenos">36</span></a><span class="sd">            inputs (pandas.DataFrame): Nonempty table of features in fitted order.</span>
-</span><span id="benchmark_prediction-37"><a href="#benchmark_prediction-37"><span class="linenos">37</span></a><span class="sd">    </span>
-</span><span id="benchmark_prediction-38"><a href="#benchmark_prediction-38"><span class="linenos">38</span></a><span class="sd">        Returns:</span>
-</span><span id="benchmark_prediction-39"><a href="#benchmark_prediction-39"><span class="linenos">39</span></a><span class="sd">            dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.</span>
-</span><span id="benchmark_prediction-40"><a href="#benchmark_prediction-40"><span class="linenos">40</span></a><span class="sd">    </span>
-</span><span id="benchmark_prediction-41"><a href="#benchmark_prediction-41"><span class="linenos">41</span></a><span class="sd">        Raises:</span>
-</span><span id="benchmark_prediction-42"><a href="#benchmark_prediction-42"><span class="linenos">42</span></a><span class="sd">            ValueError: If predict() rejects inputs or their feature schema.</span>
-</span><span id="benchmark_prediction-43"><a href="#benchmark_prediction-43"><span class="linenos">43</span></a><span class="sd">    </span>
-</span><span id="benchmark_prediction-44"><a href="#benchmark_prediction-44"><span class="linenos">44</span></a><span class="sd">        One warm-up call is excluded from timing. Clipping and feature selection</span>
-</span><span id="benchmark_prediction-45"><a href="#benchmark_prediction-45"><span class="linenos">45</span></a><span class="sd">        belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</span>
+</span><span id="benchmark_prediction-33"><a href="#benchmark_prediction-33"><span class="linenos">33</span></a>
+</span><span id="benchmark_prediction-34"><a href="#benchmark_prediction-34"><span class="linenos">34</span></a><span class="sd">    Args:</span>
+</span><span id="benchmark_prediction-35"><a href="#benchmark_prediction-35"><span class="linenos">35</span></a><span class="sd">        model: Fitted scikit-learn regressor accepting inputs in predict().</span>
+</span><span id="benchmark_prediction-36"><a href="#benchmark_prediction-36"><span class="linenos">36</span></a><span class="sd">        inputs (pandas.DataFrame): Nonempty table of features in fitted order.</span>
+</span><span id="benchmark_prediction-37"><a href="#benchmark_prediction-37"><span class="linenos">37</span></a>
+</span><span id="benchmark_prediction-38"><a href="#benchmark_prediction-38"><span class="linenos">38</span></a><span class="sd">    Returns:</span>
+</span><span id="benchmark_prediction-39"><a href="#benchmark_prediction-39"><span class="linenos">39</span></a><span class="sd">        dict[str, float]: median_ms, q25_ms and q75_ms for 30 calls, in ms.</span>
+</span><span id="benchmark_prediction-40"><a href="#benchmark_prediction-40"><span class="linenos">40</span></a>
+</span><span id="benchmark_prediction-41"><a href="#benchmark_prediction-41"><span class="linenos">41</span></a><span class="sd">    Raises:</span>
+</span><span id="benchmark_prediction-42"><a href="#benchmark_prediction-42"><span class="linenos">42</span></a><span class="sd">        ValueError: If predict() rejects inputs or their feature schema.</span>
+</span><span id="benchmark_prediction-43"><a href="#benchmark_prediction-43"><span class="linenos">43</span></a>
+</span><span id="benchmark_prediction-44"><a href="#benchmark_prediction-44"><span class="linenos">44</span></a><span class="sd">    One warm-up call is excluded from timing. Clipping and feature selection</span>
+</span><span id="benchmark_prediction-45"><a href="#benchmark_prediction-45"><span class="linenos">45</span></a><span class="sd">    belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</span>
 </span><span id="benchmark_prediction-46"><a href="#benchmark_prediction-46"><span class="linenos">46</span></a><span class="sd">    """</span>
 </span><span id="benchmark_prediction-47"><a href="#benchmark_prediction-47"><span class="linenos">47</span></a>    <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
 </span><span id="benchmark_prediction-48"><a href="#benchmark_prediction-48"><span class="linenos">48</span></a>    <span class="n">durations</span> <span class="o">=</span> <span class="p">[]</span>
@@ -684,17 +684,17 @@ belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</
     <a class="headerlink" href="#hgb_trees"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="hgb_trees-62"><a href="#hgb_trees-62"><span class="linenos">62</span></a><span class="k">def</span><span class="w"> </span><span class="nf">hgb_trees</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
 </span><span id="hgb_trees-63"><a href="#hgb_trees-63"><span class="linenos">63</span></a><span class="w">    </span><span class="sd">"""Flatten fitted HGB predictors using version-dependent internals.</span>
-</span><span id="hgb_trees-64"><a href="#hgb_trees-64"><span class="linenos">64</span></a><span class="sd">    </span>
-</span><span id="hgb_trees-65"><a href="#hgb_trees-65"><span class="linenos">65</span></a><span class="sd">        Args:</span>
-</span><span id="hgb_trees-66"><a href="#hgb_trees-66"><span class="linenos">66</span></a><span class="sd">            model (HistGradientBoostingRegressor): A fitted scalar-output estimator.</span>
-</span><span id="hgb_trees-67"><a href="#hgb_trees-67"><span class="linenos">67</span></a><span class="sd">    </span>
-</span><span id="hgb_trees-68"><a href="#hgb_trees-68"><span class="linenos">68</span></a><span class="sd">        Returns:</span>
-</span><span id="hgb_trees-69"><a href="#hgb_trees-69"><span class="linenos">69</span></a><span class="sd">            list: Internal TreePredictor objects in boosting iteration order.</span>
-</span><span id="hgb_trees-70"><a href="#hgb_trees-70"><span class="linenos">70</span></a><span class="sd">    </span>
-</span><span id="hgb_trees-71"><a href="#hgb_trees-71"><span class="linenos">71</span></a><span class="sd">        Raises:</span>
-</span><span id="hgb_trees-72"><a href="#hgb_trees-72"><span class="linenos">72</span></a><span class="sd">            AttributeError: If model is unfitted or its private layout is unsupported.</span>
-</span><span id="hgb_trees-73"><a href="#hgb_trees-73"><span class="linenos">73</span></a><span class="sd">    </span>
-</span><span id="hgb_trees-74"><a href="#hgb_trees-74"><span class="linenos">74</span></a><span class="sd">        Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.</span>
+</span><span id="hgb_trees-64"><a href="#hgb_trees-64"><span class="linenos">64</span></a>
+</span><span id="hgb_trees-65"><a href="#hgb_trees-65"><span class="linenos">65</span></a><span class="sd">    Args:</span>
+</span><span id="hgb_trees-66"><a href="#hgb_trees-66"><span class="linenos">66</span></a><span class="sd">        model (HistGradientBoostingRegressor): A fitted scalar-output estimator.</span>
+</span><span id="hgb_trees-67"><a href="#hgb_trees-67"><span class="linenos">67</span></a>
+</span><span id="hgb_trees-68"><a href="#hgb_trees-68"><span class="linenos">68</span></a><span class="sd">    Returns:</span>
+</span><span id="hgb_trees-69"><a href="#hgb_trees-69"><span class="linenos">69</span></a><span class="sd">        list: Internal TreePredictor objects in boosting iteration order.</span>
+</span><span id="hgb_trees-70"><a href="#hgb_trees-70"><span class="linenos">70</span></a>
+</span><span id="hgb_trees-71"><a href="#hgb_trees-71"><span class="linenos">71</span></a><span class="sd">    Raises:</span>
+</span><span id="hgb_trees-72"><a href="#hgb_trees-72"><span class="linenos">72</span></a><span class="sd">        AttributeError: If model is unfitted or its private layout is unsupported.</span>
+</span><span id="hgb_trees-73"><a href="#hgb_trees-73"><span class="linenos">73</span></a>
+</span><span id="hgb_trees-74"><a href="#hgb_trees-74"><span class="linenos">74</span></a><span class="sd">    Usage: hgb_trees(fitted_hgb). Intended for scikit-learn 1.9.1 inspection.</span>
 </span><span id="hgb_trees-75"><a href="#hgb_trees-75"><span class="linenos">75</span></a><span class="sd">    """</span>
 </span><span id="hgb_trees-76"><a href="#hgb_trees-76"><span class="linenos">76</span></a>    <span class="k">return</span> <span class="p">[</span>
 </span><span id="hgb_trees-77"><a href="#hgb_trees-77"><span class="linenos">77</span></a>        <span class="n">tree</span>
@@ -742,21 +742,21 @@ belong outside this helper. Example: benchmark_prediction(model, X.iloc[[0]]).</
     <a class="headerlink" href="#numerical_array_bytes"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="numerical_array_bytes-83"><a href="#numerical_array_bytes-83"><span class="linenos"> 83</span></a><span class="k">def</span><span class="w"> </span><span class="nf">numerical_array_bytes</span><span class="p">(</span><span class="n">model</span><span class="p">):</span>
 </span><span id="numerical_array_bytes-84"><a href="#numerical_array_bytes-84"><span class="linenos"> 84</span></a><span class="w">    </span><span class="sd">"""Count selected fitted numerical arrays rather than process RAM.</span>
-</span><span id="numerical_array_bytes-85"><a href="#numerical_array_bytes-85"><span class="linenos"> 85</span></a><span class="sd">    </span>
-</span><span id="numerical_array_bytes-86"><a href="#numerical_array_bytes-86"><span class="linenos"> 86</span></a><span class="sd">        Args:</span>
-</span><span id="numerical_array_bytes-87"><a href="#numerical_array_bytes-87"><span class="linenos"> 87</span></a><span class="sd">            model: Fitted LinearRegression, RandomForestRegressor or</span>
-</span><span id="numerical_array_bytes-88"><a href="#numerical_array_bytes-88"><span class="linenos"> 88</span></a><span class="sd">                HistGradientBoostingRegressor. Scalar-output regression is assumed.</span>
-</span><span id="numerical_array_bytes-89"><a href="#numerical_array_bytes-89"><span class="linenos"> 89</span></a><span class="sd">    </span>
-</span><span id="numerical_array_bytes-90"><a href="#numerical_array_bytes-90"><span class="linenos"> 90</span></a><span class="sd">        Returns:</span>
-</span><span id="numerical_array_bytes-91"><a href="#numerical_array_bytes-91"><span class="linenos"> 91</span></a><span class="sd">            int: Coefficient/intercept bytes for linear models, node/value bytes</span>
-</span><span id="numerical_array_bytes-92"><a href="#numerical_array_bytes-92"><span class="linenos"> 92</span></a><span class="sd">            for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.</span>
-</span><span id="numerical_array_bytes-93"><a href="#numerical_array_bytes-93"><span class="linenos"> 93</span></a><span class="sd">            Python objects, temporary workspace and process/peak RAM are excluded.</span>
-</span><span id="numerical_array_bytes-94"><a href="#numerical_array_bytes-94"><span class="linenos"> 94</span></a><span class="sd">    </span>
-</span><span id="numerical_array_bytes-95"><a href="#numerical_array_bytes-95"><span class="linenos"> 95</span></a><span class="sd">        Raises:</span>
-</span><span id="numerical_array_bytes-96"><a href="#numerical_array_bytes-96"><span class="linenos"> 96</span></a><span class="sd">            TypeError: If the estimator type is unsupported.</span>
-</span><span id="numerical_array_bytes-97"><a href="#numerical_array_bytes-97"><span class="linenos"> 97</span></a><span class="sd">            AttributeError: If unfitted or private HGB internals are incompatible.</span>
-</span><span id="numerical_array_bytes-98"><a href="#numerical_array_bytes-98"><span class="linenos"> 98</span></a><span class="sd">    </span>
-</span><span id="numerical_array_bytes-99"><a href="#numerical_array_bytes-99"><span class="linenos"> 99</span></a><span class="sd">        Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.</span>
+</span><span id="numerical_array_bytes-85"><a href="#numerical_array_bytes-85"><span class="linenos"> 85</span></a>
+</span><span id="numerical_array_bytes-86"><a href="#numerical_array_bytes-86"><span class="linenos"> 86</span></a><span class="sd">    Args:</span>
+</span><span id="numerical_array_bytes-87"><a href="#numerical_array_bytes-87"><span class="linenos"> 87</span></a><span class="sd">        model: Fitted LinearRegression, RandomForestRegressor or</span>
+</span><span id="numerical_array_bytes-88"><a href="#numerical_array_bytes-88"><span class="linenos"> 88</span></a><span class="sd">            HistGradientBoostingRegressor. Scalar-output regression is assumed.</span>
+</span><span id="numerical_array_bytes-89"><a href="#numerical_array_bytes-89"><span class="linenos"> 89</span></a>
+</span><span id="numerical_array_bytes-90"><a href="#numerical_array_bytes-90"><span class="linenos"> 90</span></a><span class="sd">    Returns:</span>
+</span><span id="numerical_array_bytes-91"><a href="#numerical_array_bytes-91"><span class="linenos"> 91</span></a><span class="sd">        int: Coefficient/intercept bytes for linear models, node/value bytes</span>
+</span><span id="numerical_array_bytes-92"><a href="#numerical_array_bytes-92"><span class="linenos"> 92</span></a><span class="sd">        for RF, or baseline/bin thresholds/nodes/category bitsets for HGB.</span>
+</span><span id="numerical_array_bytes-93"><a href="#numerical_array_bytes-93"><span class="linenos"> 93</span></a><span class="sd">        Python objects, temporary workspace and process/peak RAM are excluded.</span>
+</span><span id="numerical_array_bytes-94"><a href="#numerical_array_bytes-94"><span class="linenos"> 94</span></a>
+</span><span id="numerical_array_bytes-95"><a href="#numerical_array_bytes-95"><span class="linenos"> 95</span></a><span class="sd">    Raises:</span>
+</span><span id="numerical_array_bytes-96"><a href="#numerical_array_bytes-96"><span class="linenos"> 96</span></a><span class="sd">        TypeError: If the estimator type is unsupported.</span>
+</span><span id="numerical_array_bytes-97"><a href="#numerical_array_bytes-97"><span class="linenos"> 97</span></a><span class="sd">        AttributeError: If unfitted or private HGB internals are incompatible.</span>
+</span><span id="numerical_array_bytes-98"><a href="#numerical_array_bytes-98"><span class="linenos"> 98</span></a>
+</span><span id="numerical_array_bytes-99"><a href="#numerical_array_bytes-99"><span class="linenos"> 99</span></a><span class="sd">    Usage: numerical_array_bytes(fitted_model). HGB internals are version-dependent.</span>
 </span><span id="numerical_array_bytes-100"><a href="#numerical_array_bytes-100"><span class="linenos">100</span></a><span class="sd">    """</span>
 </span><span id="numerical_array_bytes-101"><a href="#numerical_array_bytes-101"><span class="linenos">101</span></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">LinearRegression</span><span class="p">):</span>
 </span><span id="numerical_array_bytes-102"><a href="#numerical_array_bytes-102"><span class="linenos">102</span></a>        <span class="n">arrays</span> <span class="o">=</span> <span class="p">[</span>
@@ -832,19 +832,19 @@ HistGradientBoostingRegressor. Scalar-output regression is assumed.</li>
     <a class="headerlink" href="#save_table"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="save_table-132"><a href="#save_table-132"><span class="linenos">132</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_table</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
 </span><span id="save_table-133"><a href="#save_table-133"><span class="linenos">133</span></a><span class="w">    </span><span class="sd">"""Save an unrounded CSV and print a three-decimal summary.</span>
-</span><span id="save_table-134"><a href="#save_table-134"><span class="linenos">134</span></a><span class="sd">    </span>
-</span><span id="save_table-135"><a href="#save_table-135"><span class="linenos">135</span></a><span class="sd">        Args:</span>
-</span><span id="save_table-136"><a href="#save_table-136"><span class="linenos">136</span></a><span class="sd">            rows (list[dict]): Tabular records compatible with pandas.DataFrame.</span>
-</span><span id="save_table-137"><a href="#save_table-137"><span class="linenos">137</span></a><span class="sd">            filename (str): CSV filename relative to the configured OUTPUT_DIR.</span>
-</span><span id="save_table-138"><a href="#save_table-138"><span class="linenos">138</span></a><span class="sd">            title (str): Heading printed above the displayed summary.</span>
-</span><span id="save_table-139"><a href="#save_table-139"><span class="linenos">139</span></a><span class="sd">    </span>
-</span><span id="save_table-140"><a href="#save_table-140"><span class="linenos">140</span></a><span class="sd">        Returns:</span>
-</span><span id="save_table-141"><a href="#save_table-141"><span class="linenos">141</span></a><span class="sd">            pandas.DataFrame: The unrounded table written to disk.</span>
-</span><span id="save_table-142"><a href="#save_table-142"><span class="linenos">142</span></a><span class="sd">    </span>
-</span><span id="save_table-143"><a href="#save_table-143"><span class="linenos">143</span></a><span class="sd">        Raises:</span>
-</span><span id="save_table-144"><a href="#save_table-144"><span class="linenos">144</span></a><span class="sd">            OSError: If the output cannot be written.</span>
-</span><span id="save_table-145"><a href="#save_table-145"><span class="linenos">145</span></a><span class="sd">    </span>
-</span><span id="save_table-146"><a href="#save_table-146"><span class="linenos">146</span></a><span class="sd">        Usage: save_table(records, "timing.csv", "Timing results").</span>
+</span><span id="save_table-134"><a href="#save_table-134"><span class="linenos">134</span></a>
+</span><span id="save_table-135"><a href="#save_table-135"><span class="linenos">135</span></a><span class="sd">    Args:</span>
+</span><span id="save_table-136"><a href="#save_table-136"><span class="linenos">136</span></a><span class="sd">        rows (list[dict]): Tabular records compatible with pandas.DataFrame.</span>
+</span><span id="save_table-137"><a href="#save_table-137"><span class="linenos">137</span></a><span class="sd">        filename (str): CSV filename relative to the configured OUTPUT_DIR.</span>
+</span><span id="save_table-138"><a href="#save_table-138"><span class="linenos">138</span></a><span class="sd">        title (str): Heading printed above the displayed summary.</span>
+</span><span id="save_table-139"><a href="#save_table-139"><span class="linenos">139</span></a>
+</span><span id="save_table-140"><a href="#save_table-140"><span class="linenos">140</span></a><span class="sd">    Returns:</span>
+</span><span id="save_table-141"><a href="#save_table-141"><span class="linenos">141</span></a><span class="sd">        pandas.DataFrame: The unrounded table written to disk.</span>
+</span><span id="save_table-142"><a href="#save_table-142"><span class="linenos">142</span></a>
+</span><span id="save_table-143"><a href="#save_table-143"><span class="linenos">143</span></a><span class="sd">    Raises:</span>
+</span><span id="save_table-144"><a href="#save_table-144"><span class="linenos">144</span></a><span class="sd">        OSError: If the output cannot be written.</span>
+</span><span id="save_table-145"><a href="#save_table-145"><span class="linenos">145</span></a>
+</span><span id="save_table-146"><a href="#save_table-146"><span class="linenos">146</span></a><span class="sd">    Usage: save_table(records, "timing.csv", "Timing results").</span>
 </span><span id="save_table-147"><a href="#save_table-147"><span class="linenos">147</span></a><span class="sd">    """</span>
 </span><span id="save_table-148"><a href="#save_table-148"><span class="linenos">148</span></a>    <span class="n">table</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
 </span><span id="save_table-149"><a href="#save_table-149"><span class="linenos">149</span></a>    <span class="n">table</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">OUTPUT_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -896,22 +896,22 @@ HistGradientBoostingRegressor. Scalar-output regression is assumed.</li>
     <a class="headerlink" href="#save_training_profile"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="save_training_profile-157"><a href="#save_training_profile-157"><span class="linenos">157</span></a><span class="k">def</span><span class="w"> </span><span class="nf">save_training_profile</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
 </span><span id="save_training_profile-158"><a href="#save_training_profile-158"><span class="linenos">158</span></a><span class="w">    </span><span class="sd">"""Profile a separate cloned fit after runtime benchmarking.</span>
-</span><span id="save_training_profile-159"><a href="#save_training_profile-159"><span class="linenos">159</span></a><span class="sd">    </span>
-</span><span id="save_training_profile-160"><a href="#save_training_profile-160"><span class="linenos">160</span></a><span class="sd">        Args:</span>
-</span><span id="save_training_profile-161"><a href="#save_training_profile-161"><span class="linenos">161</span></a><span class="sd">            model_name (str): Human-readable name used to construct output filenames.</span>
-</span><span id="save_training_profile-162"><a href="#save_training_profile-162"><span class="linenos">162</span></a><span class="sd">            template: Unfitted scikit-learn-compatible estimator to clone.</span>
-</span><span id="save_training_profile-163"><a href="#save_training_profile-163"><span class="linenos">163</span></a><span class="sd">            inputs (pandas.DataFrame): Training feature table in fixed feature order.</span>
-</span><span id="save_training_profile-164"><a href="#save_training_profile-164"><span class="linenos">164</span></a><span class="sd">            targets (array-like): Aligned training RUL in cycles.</span>
-</span><span id="save_training_profile-165"><a href="#save_training_profile-165"><span class="linenos">165</span></a><span class="sd">    </span>
-</span><span id="save_training_profile-166"><a href="#save_training_profile-166"><span class="linenos">166</span></a><span class="sd">        Returns:</span>
-</span><span id="save_training_profile-167"><a href="#save_training_profile-167"><span class="linenos">167</span></a><span class="sd">            None: Writes binary .prof and readable top-15 cumulative-time text files.</span>
-</span><span id="save_training_profile-168"><a href="#save_training_profile-168"><span class="linenos">168</span></a><span class="sd">    </span>
-</span><span id="save_training_profile-169"><a href="#save_training_profile-169"><span class="linenos">169</span></a><span class="sd">        Raises:</span>
-</span><span id="save_training_profile-170"><a href="#save_training_profile-170"><span class="linenos">170</span></a><span class="sd">            ValueError: If clone or fit rejects the configuration/data.</span>
-</span><span id="save_training_profile-171"><a href="#save_training_profile-171"><span class="linenos">171</span></a><span class="sd">            OSError: If profile files cannot be written.</span>
-</span><span id="save_training_profile-172"><a href="#save_training_profile-172"><span class="linenos">172</span></a><span class="sd">    </span>
-</span><span id="save_training_profile-173"><a href="#save_training_profile-173"><span class="linenos">173</span></a><span class="sd">        Usage: save_training_profile("RF", template, X_train, y_train).</span>
-</span><span id="save_training_profile-174"><a href="#save_training_profile-174"><span class="linenos">174</span></a><span class="sd">        Profiled times include instrumentation overhead; use benchmark timing for comparisons.</span>
+</span><span id="save_training_profile-159"><a href="#save_training_profile-159"><span class="linenos">159</span></a>
+</span><span id="save_training_profile-160"><a href="#save_training_profile-160"><span class="linenos">160</span></a><span class="sd">    Args:</span>
+</span><span id="save_training_profile-161"><a href="#save_training_profile-161"><span class="linenos">161</span></a><span class="sd">        model_name (str): Human-readable name used to construct output filenames.</span>
+</span><span id="save_training_profile-162"><a href="#save_training_profile-162"><span class="linenos">162</span></a><span class="sd">        template: Unfitted scikit-learn-compatible estimator to clone.</span>
+</span><span id="save_training_profile-163"><a href="#save_training_profile-163"><span class="linenos">163</span></a><span class="sd">        inputs (pandas.DataFrame): Training feature table in fixed feature order.</span>
+</span><span id="save_training_profile-164"><a href="#save_training_profile-164"><span class="linenos">164</span></a><span class="sd">        targets (array-like): Aligned training RUL in cycles.</span>
+</span><span id="save_training_profile-165"><a href="#save_training_profile-165"><span class="linenos">165</span></a>
+</span><span id="save_training_profile-166"><a href="#save_training_profile-166"><span class="linenos">166</span></a><span class="sd">    Returns:</span>
+</span><span id="save_training_profile-167"><a href="#save_training_profile-167"><span class="linenos">167</span></a><span class="sd">        None: Writes binary .prof and readable top-15 cumulative-time text files.</span>
+</span><span id="save_training_profile-168"><a href="#save_training_profile-168"><span class="linenos">168</span></a>
+</span><span id="save_training_profile-169"><a href="#save_training_profile-169"><span class="linenos">169</span></a><span class="sd">    Raises:</span>
+</span><span id="save_training_profile-170"><a href="#save_training_profile-170"><span class="linenos">170</span></a><span class="sd">        ValueError: If clone or fit rejects the configuration/data.</span>
+</span><span id="save_training_profile-171"><a href="#save_training_profile-171"><span class="linenos">171</span></a><span class="sd">        OSError: If profile files cannot be written.</span>
+</span><span id="save_training_profile-172"><a href="#save_training_profile-172"><span class="linenos">172</span></a>
+</span><span id="save_training_profile-173"><a href="#save_training_profile-173"><span class="linenos">173</span></a><span class="sd">    Usage: save_training_profile("RF", template, X_train, y_train).</span>
+</span><span id="save_training_profile-174"><a href="#save_training_profile-174"><span class="linenos">174</span></a><span class="sd">    Profiled times include instrumentation overhead; use benchmark timing for comparisons.</span>
 </span><span id="save_training_profile-175"><a href="#save_training_profile-175"><span class="linenos">175</span></a><span class="sd">    """</span>
 </span><span id="save_training_profile-176"><a href="#save_training_profile-176"><span class="linenos">176</span></a>    <span class="n">profile_model</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 </span><span id="save_training_profile-177"><a href="#save_training_profile-177"><span class="linenos">177</span></a>    <span class="n">profiler</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
@@ -976,18 +976,18 @@ Profiled times include instrumentation overhead; use benchmark timing for compar
     <a class="headerlink" href="#main"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="main-195"><a href="#main-195"><span class="linenos">195</span></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
 </span><span id="main-196"><a href="#main-196"><span class="linenos">196</span></a><span class="w">    </span><span class="sd">"""Benchmark the four fixed models on the complete FD001 training set.</span>
-</span><span id="main-197"><a href="#main-197"><span class="linenos">197</span></a><span class="sd">    </span>
-</span><span id="main-198"><a href="#main-198"><span class="linenos">198</span></a><span class="sd">        Returns:</span>
-</span><span id="main-199"><a href="#main-199"><span class="linenos">199</span></a><span class="sd">            None: Writes runtime quartiles, serialized sizes, selected-array memory,</span>
-</span><span id="main-200"><a href="#main-200"><span class="linenos">200</span></a><span class="sd">            linear arithmetic intensity, tree operations, profiles and environment CSV.</span>
-</span><span id="main-201"><a href="#main-201"><span class="linenos">201</span></a><span class="sd">    </span>
-</span><span id="main-202"><a href="#main-202"><span class="linenos">202</span></a><span class="sd">        Raises:</span>
-</span><span id="main-203"><a href="#main-203"><span class="linenos">203</span></a><span class="sd">            FileNotFoundError: If prepared training or endpoint CSVs are missing.</span>
-</span><span id="main-204"><a href="#main-204"><span class="linenos">204</span></a><span class="sd">            ValueError: If inputs are empty, duplicated or invalid for fitting.</span>
-</span><span id="main-205"><a href="#main-205"><span class="linenos">205</span></a><span class="sd">            OSError: If results cannot be written.</span>
-</span><span id="main-206"><a href="#main-206"><span class="linenos">206</span></a><span class="sd">    </span>
-</span><span id="main-207"><a href="#main-207"><span class="linenos">207</span></a><span class="sd">        No arguments are accepted. Run ``python -m rul_project performance`` after</span>
-</span><span id="main-208"><a href="#main-208"><span class="linenos">208</span></a><span class="sd">        testevaluation. Uses three fits and 30 warm prediction calls with one thread.</span>
+</span><span id="main-197"><a href="#main-197"><span class="linenos">197</span></a>
+</span><span id="main-198"><a href="#main-198"><span class="linenos">198</span></a><span class="sd">    Returns:</span>
+</span><span id="main-199"><a href="#main-199"><span class="linenos">199</span></a><span class="sd">        None: Writes runtime quartiles, serialized sizes, selected-array memory,</span>
+</span><span id="main-200"><a href="#main-200"><span class="linenos">200</span></a><span class="sd">        linear arithmetic intensity, tree operations, profiles and environment CSV.</span>
+</span><span id="main-201"><a href="#main-201"><span class="linenos">201</span></a>
+</span><span id="main-202"><a href="#main-202"><span class="linenos">202</span></a><span class="sd">    Raises:</span>
+</span><span id="main-203"><a href="#main-203"><span class="linenos">203</span></a><span class="sd">        FileNotFoundError: If prepared training or endpoint CSVs are missing.</span>
+</span><span id="main-204"><a href="#main-204"><span class="linenos">204</span></a><span class="sd">        ValueError: If inputs are empty, duplicated or invalid for fitting.</span>
+</span><span id="main-205"><a href="#main-205"><span class="linenos">205</span></a><span class="sd">        OSError: If results cannot be written.</span>
+</span><span id="main-206"><a href="#main-206"><span class="linenos">206</span></a>
+</span><span id="main-207"><a href="#main-207"><span class="linenos">207</span></a><span class="sd">    No arguments are accepted. Run ``python -m rul_project performance`` after</span>
+</span><span id="main-208"><a href="#main-208"><span class="linenos">208</span></a><span class="sd">    testevaluation. Uses three fits and 30 warm prediction calls with one thread.</span>
 </span><span id="main-209"><a href="#main-209"><span class="linenos">209</span></a><span class="sd">    """</span>
 </span><span id="main-210"><a href="#main-210"><span class="linenos">210</span></a>    <span class="n">OUTPUT_DIR</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span><span id="main-211"><a href="#main-211"><span class="linenos">211</span></a>
